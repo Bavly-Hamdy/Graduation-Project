@@ -1,0 +1,29 @@
+.history-container {
+    padding: 20px;
+    margin-left: 220px; /* Same as above, keeping it consistent with the sidebar */
+  }
+  
+  .history-container h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  
+  .history-list {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .history-list li {
+    background-color: #f5f5f5;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .history-list li:hover {
+    background-color: #52a7bc;
+    color: white;
+  }
+  

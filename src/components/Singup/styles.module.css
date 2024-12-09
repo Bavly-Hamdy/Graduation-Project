@@ -1,0 +1,176 @@
+.signup_container {
+	width: 100%;
+	min-height: 100vh;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: url('/public/wallpaper.jpg') no-repeat center center/cover; /* بدون "/" في بداية المسار */
+	background-size: cover; /* لجعل الخلفية تغطي كامل الصفحة */
+	background-position: center; /* لضمان تمركز الصورة */
+	transition: background 0.5s ease; /* لجعل التغيير سلس */
+	opacity: 0.9; /* لجعل الخلفية شوية شفافة */
+  }
+
+.signup_form_container {
+	width: 100%;
+	max-width: 900px; /* أقصى عرض */
+	height: auto;
+	display: flex;
+	flex-wrap: wrap; /* للسماح باللف على الشاشات الصغيرة */
+	border-radius: 10px;
+	box-shadow: 0px 3px 3px -2px rgb(0 0 0 / 20%),
+		0px 3px 4px 0px rgb(0 0 0 / 14%), 0px 1px 8px 0px rgb(0 0 0 / 12%);
+	transition: all 0.3s ease;
+}
+
+.signup_form_container:hover {
+	transform: translateY(-5px);
+	opacity: 0.9;
+}
+
+.left {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	background-color: #52a7bc;
+	border-top-left-radius: 10px;
+	border-bottom-left-radius: 10px;
+}
+
+.left, .right {
+	width: 100%; /* عرض كامل للشاشات الصغيرة */
+	padding: 20px;
+}
+
+.left {
+	background-color: #52a7bc;
+	border-radius: 10px 0 0 10px;
+}
+
+.left h1 {
+	margin-top: 0;
+	color: white;
+	font-size: 35px;
+	align-self: center;
+}
+
+.right {
+	flex: 2;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	background-color: white;
+	border-radius: 0 0 10px 10px;
+	border-top-right-radius: 10px;
+	border-bottom-right-radius: 10px;
+}
+
+.form_container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.form_container h1 {
+	font-size: 40px;
+	margin-top: 0;
+}
+
+.input {
+	outline: none;
+	border: none;
+	width: 100%; /* جعل العرض 100% */
+	padding: 12px;
+	border-radius: 10px;
+	background-color: #edf5f3;
+	margin: 5px 0; /* تعديل الهوامش */
+	font-size: 14px;
+}
+
+.password_container, 
+.age_gender_container, 
+.weight_height_container {
+	display: flex;
+	gap: 10px; /* تباعد موحد بين الحقول */
+	width: 100%; /* عرض كامل */
+	max-width: 500px; /* أقصى عرض للحاوية */
+}
+
+.password_container input, 
+.age_gender_container select, 
+.age_gender_container input, 
+.weight_height_container input {
+	flex: 1; /* جعل الحقول تأخذ نفس الحجم */
+}
+
+.textarea {
+	outline: none;
+	border: none;
+	width: 100%; /* ��عل العرض 100% */
+	width: 100%; /* عرض كامل */
+	max-width: 500px; /* أقصى عرض */
+	padding: 12px;
+	border-radius: 10px;
+	background-color: #edf5f3;
+	margin: 10px 0; /* مسافات متساوية */
+	resize: none; /* منع التغيير */
+}
+
+.error_msg {
+	width: 100%;
+	max-width: 500px; /* أقصى عرض */
+	padding: 15px;
+	font-size: 14px;
+	background-color: #f34646;
+	color: white;
+	border-radius: 5px;
+	text-align: center;
+	margin: 10px 0;
+}
+
+.white_btn,
+.green_btn {
+	border: none;
+	outline: none;
+	padding: 12px 0;
+	background-color: white;
+	border-radius: 20px;
+	width: 180px;
+	font-weight: bold;
+	font-size: 14px;
+	cursor: pointer;
+	transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.green_btn {
+	background-color: #52a7bc;
+	color: white;
+	margin: 10px;
+}
+
+.white_btn:hover {
+	background-color: #e0e0e0;
+}
+
+.green_btn:hover {
+	background-color: #3d899c;
+}
+
+@media (max-width: 768px) {
+	.signup_form_container {
+		flex-direction: column;
+	}
+
+	.password_container,
+	.age_gender_container,
+	.weight_height_container {
+		flex-direction: column;
+	}
+
+	.input, .textarea {
+		max-width: 100%; /* إلغاء الحد الأقصى للحجم */
+	}
+}

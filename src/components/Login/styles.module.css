@@ -1,0 +1,188 @@
+.login_container {
+	width: 100%;
+	min-height: 100vh;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: url('/public/wallpaper.jpg') no-repeat center center/cover; /* بدون "/" في بداية المسار */
+	background-size: cover; /* لجعل الخلفية تغطي كامل الصفحة */
+	background-position: center; /* لضمان تمركز الصورة */
+	transition: background 0.5s ease; /* لجعل التغيير سلس */
+	opacity: 0.9; /* لجعل الخلفية شوية شفافة */
+  }
+
+.login_form_container {
+	width: 900px;
+	height: 500px;
+	display: flex;
+	border-radius: 10px;
+	box-shadow: 0px 3px 3px -2px rgb(0 0 0 / 20%), 0px 3px 4px 0px rgb(0 0 0 / 14%), 0px 1px 8px 0px rgb(0 0 0 / 12%);
+	transition: all 0.3s ease;
+}
+
+.login_form_container:hover {
+	transform: translateY(-5px);
+	opacity: 0.9;
+}
+
+.left {
+	flex: 2;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	background-color: white;
+	border-top-left-radius: 10px;
+	border-bottom-left-radius: 10px;
+	padding: 20px;
+}
+
+.form_container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.form_container h1 {
+	font-size: 40px;
+	margin-top: 0;
+	text-align: center;
+}
+
+.input {
+	outline: none;
+	border: none;
+	width: 370px;
+	padding: 15px;
+	border-radius: 10px;
+	background-color: #edf5f3;
+	margin: 5px 0;
+	font-size: 14px;
+}
+
+.error_msg {
+	width: 370px;
+	padding: 15px;
+	margin: 5px 0;
+	font-size: 14px;
+	background-color: #f34646;
+	color: white;
+	border-radius: 5px;
+	text-align: center;
+}
+
+.right {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	background-color: #52a7bc;
+	border-top-right-radius: 10px;
+	border-bottom-right-radius: 10px;
+	padding: 20px;
+}
+
+.right h1 {
+	margin-top: 0;
+	color: white;
+	font-size: 40px;
+	text-align: center;
+}
+
+.white_btn,
+.green_btn,
+.social_btn {
+	border: none;
+	outline: none;
+	padding: 12px 0;
+	background-color: white;
+	border-radius: 20px;
+	width: 180px;
+	font-weight: bold;
+	font-size: 14px;
+	cursor: pointer;
+	transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.green_btn {
+	background-color: #52a7bc;
+	color: white;
+	margin: 10px;
+}
+
+.white_btn:hover {
+	background-color: #e0e0e0;
+}
+
+.green_btn:hover {
+	background-color: #3d899c;
+}
+
+.social_login {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	margin-top: 20px;
+}
+
+.social_btn {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border: none;
+	outline: none;
+	padding: 12px 0;
+	background-color: #f0f0f0;
+	border-radius: 20px;
+	width: 180px;
+	font-weight: bold;
+	color: #333;
+	cursor: pointer;
+	margin: 5px 0;
+}
+
+.social_btn .svg-inline--fa {
+	margin-right: 8px; /* مسافة بين الأيقونة والنص */
+}
+
+.forgot_password {
+	color: #52a7bc;
+	margin-top: 10px;
+	text-decoration: none;
+}
+
+/* استعلامات الوسائط لجعل التصميم Responsive */
+@media (max-width: 768px) {
+	.login_form_container {
+		flex-direction: column;
+		width: 100%;
+		height: auto;
+	}
+
+	.left, .right {
+		flex: none;
+		width: 100%;
+		border-radius: 10px;
+	}
+
+	.input, .error_msg {
+		width: 100%;
+	}
+}
+
+@media (max-width: 480px) {
+	.form_container h1, .right h1 {
+		font-size: 30px;
+	}
+
+	.input, .error_msg {
+		font-size: 12px;
+		padding: 10px;
+	}
+
+	.white_btn, .green_btn, .social_btn {
+		width: 100%;
+		font-size: 12px;
+	}
+}
