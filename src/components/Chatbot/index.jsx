@@ -80,8 +80,16 @@ const Chatbot = () => {
 
   // إضافة رسالة إلى الـ Saved Messages
   const handleSaveMessage = (msg) => {
+    // استرجاع الرسائل القديمة من localStorage أو تعيين قائمة فارغة إذا لم تكن موجودة
+    const savedMessages = JSON.parse(localStorage.getItem("savedMessages")) || [];
+    
+    // إضافة الرسالة الجديدة إلى الرسائل المحفوظة
     const updatedSavedMessages = [...savedMessages, msg];
+    
+    // تحديث الحالة
     setSavedMessages(updatedSavedMessages);
+    
+    // تخزين الرسائل في localStorage
     localStorage.setItem("savedMessages", JSON.stringify(updatedSavedMessages));
   };
 
