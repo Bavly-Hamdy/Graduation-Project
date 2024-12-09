@@ -1,0 +1,14 @@
+{
+  "files": {
+    "main.css": "/Graduation-Project/static/css/main.2ffb14c7.css",
+    "main.js": "/Graduation-Project/static/js/main.835707a5.js",
+    "static/media/wallpaper.jpg": "/Graduation-Project/static/media/wallpaper.545ba1710754d6815e5d.jpg",
+    "index.html": "/Graduation-Project/index.html",
+    "main.2ffb14c7.css.map": "/Graduation-Project/static/css/main.2ffb14c7.css.map",
+    "main.835707a5.js.map": "/Graduation-Project/static/js/main.835707a5.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.2ffb14c7.css",
+    "static/js/main.835707a5.js"
+  ]
+}
