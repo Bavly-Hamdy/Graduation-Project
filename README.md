@@ -1,6 +1,6 @@
 # Integrated Healthcare Assistant Powered by AI
 
-![Healthcare Assistant](https://img.icons8.com/color/48/000000/healthcare.png)
+![Healthcare Assistant](https://austincareerinstitute.edu/wp-content/uploads/2023/12/ma-ai-scaled.jpg)
 
 ## Introduction
 The "Integrated Healthcare Assistant" project aims to provide a comprehensive healthcare system powered by artificial intelligence to enhance personal healthcare. The project focuses on assisting individuals, especially the elderly and those with disabilities, in effectively managing their health.
