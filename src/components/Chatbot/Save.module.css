@@ -1,99 +1,80 @@
-/* الصفحة الكاملة */
-.pageContainer {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  padding: 20px;
-  background-color: #f9f9f9;
-  min-height: 100vh;
-  font-family: Arial, sans-serif;
-}
-
-/* عنوان الصفحة */
-.title {
-  font-size: 24px;
-  font-weight: bold;
-  color: #333;
-  margin-bottom: 20px;
-}
-
-/* قائمة الرسائل */
-.messageList {
+/* Styles for Navbar */
+.navbar_section {
+  position: fixed;
+  top: 0;
   width: 100%;
-  max-width: 600px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  background: #fff;
-  overflow: hidden;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
 }
 
-/* كل بطاقة رسالة */
-.messageCard {
+.navbar {
+  height: 70px;
+  background-color: #52a7bc;
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 10px 15px;
-  border-bottom: 1px solid #ddd;
-  transition: background 0.3s;
+  justify-content: space-between;
+  padding: 0 20px;
+  margin: 0;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
-/* نص الرسالة */
-.messageText {
-  flex: 1;
-  font-size: 16px;
-  color: #555;
-  word-wrap: break-word;
-}
-
-/* زر الحذف */
-.deleteButton {
-  background: #ff4d4d;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  padding: 8px 12px;
+.logo {
+  color: white;
+  font-size: 25px;
   cursor: pointer;
-  font-size: 14px;
-  transition: background 0.3s, transform 0.2s;
 }
 
-.deleteButton i {
-  margin-right: 5px;
+.nav_links {
+  list-style-type: none;
+  display: flex;
+  gap: 20px;
 }
 
-.deleteButton:hover {
-  background: #e43c3c;
-  transform: scale(1.05);
+.nav_links li {
+  color: white;
+  padding: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: color 0.2s;
 }
 
-/* لا توجد رسائل */
-.noMessages {
-  font-size: 18px;
-  color: #888;
+.nav_links li:hover {
+  color: #cfcfcf;
+}
+
+/* Styles for Saved Messages */
+.title {
+  text-align: center;
   margin: 20px 0;
 }
 
-/* زر العودة */
-.backButton {
-  margin-top: 20px;
+.messageTable {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.messageRow {
+  display: flex;
+  justify-content: space-between;
+  width: 80%;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+.iconContainer {
+  display: flex;
+  gap: 10px;
+}
+
+.backButton, .clearButton {
+  margin: 10px;
   padding: 10px 20px;
-  font-size: 16px;
-  background: #007bff;
-  color: white;
   border: none;
-  border-radius: 5px;
+  background-color: #52a7bc;
+  color: white;
   cursor: pointer;
-  transition: background 0.3s, transform 0.2s;
 }
 
-.backButton:hover {
-  background: #0056b3;
-  transform: scale(1.05);
-}
-
-/* عند تمرير الماوس فوق الرسائل */
-.messageCard:hover {
-  background-color: #f5f5f5;
+.clearButton {
+  background-color: #ff4d4d; /* Red color for clear button */
 }
