@@ -1,11 +1,139 @@
-/* Styles for Navbar */
-.navbar_section {
-  position: fixed;
-  top: 0;
-  width: 100%;
-  z-index: 1000;
+/* Page Container */
+.pageContainer {
+  padding: 20px;
+  font-family: Arial, sans-serif;
 }
 
+/* Title */
+.title {
+  text-align: center;
+  font-size: 28px;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+/* Message Table */
+.messageTable {
+  width: 100%;
+  margin-top: 20px;
+}
+
+/* Table Header */
+.tableHeader {
+  display: flex;
+  padding: 20px;
+  background-color: #f1f1f1;
+  border-radius: 8px;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.columnHeader {
+  font-weight: bold;
+  width: 48%;
+  text-align: center;
+  color: #555;
+}
+
+/* Message Row */
+.messageRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  padding: 15px;
+  background-color: #fff;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.messageRow:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Message Text */
+.messageText {
+  width: 48%;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+}
+
+.messageText:hover {
+  background-color: #eaeaea;
+}
+
+/* Action Icons */
+.actionIcons {
+  width: 48%;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+.deleteButton, .favouriteButton {
+  background: none;
+  border: none;
+  font-size: 22px;
+  cursor: pointer;
+  transition: color 0.3s, transform 0.3s;
+}
+
+.deleteButton:hover, .favouriteButton:hover {
+  color: #ff4d4d;
+  transform: scale(1.2);
+}
+
+.favourited {
+  color: #ff6347;
+}
+
+/* Buttons Container */
+.buttonsContainer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 30px;
+}
+
+.backButton, .clearButton {
+  padding: 12px 25px;
+  background-color: #4CAF50;
+  color: white;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+.backButton:hover, .clearButton:hover {
+  background-color: #45a049;
+  transform: scale(1.05);
+}
+
+.clearButton {
+  background-color: #f44336;
+}
+
+.clearButton:hover {
+  background-color: #e53935;
+}
+
+/* No Messages */
+.noMessages {
+  text-align: center;
+  color: #777;
+  font-size: 18px;
+  font-style: italic;
+}
+
+/* Navbar Styles */
 .navbar {
   height: 70px;
   background-color: #52a7bc;
@@ -15,6 +143,10 @@
   padding: 0 20px;
   margin: 0;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
 }
 
 .logo {
@@ -23,12 +155,14 @@
   cursor: pointer;
 }
 
+/* Navbar Links Section */
 .nav_links {
   list-style-type: none;
   display: flex;
   gap: 20px;
 }
 
+/* Each Navbar Item */
 .nav_links li {
   color: white;
   padding: 10px;
@@ -41,40 +175,51 @@
   color: #cfcfcf;
 }
 
-/* Styles for Saved Messages */
-.title {
-  text-align: center;
-  margin: 20px 0;
+/* User Menu Section */
+.user_menu {
+  display: flex;
+  align-items: center;
+  position: relative;
+  cursor: pointer;
+  margin-left: 20px;
 }
 
-.messageTable {
+/* User Icon Style (دائرة تمثل نوع المستخدم) */
+.user_icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #f1f1f1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.2rem;
+  cursor: pointer;
+  margin-left: 20px;
+}
+
+.dropdown_content {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  position: absolute;
+  top: 50px;
+  right: 0;
+  background-color: white;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+  border-radius: 5px;
 }
 
-.messageRow {
-  display: flex;
-  justify-content: space-between;
-  width: 80%;
+.dropdown_content a {
   padding: 10px;
-  border-bottom: 1px solid #ddd;
+  text-decoration: none;
+  color: black;
+  border-radius: 5px;
 }
 
-.iconContainer {
-  display: flex;
-  gap: 10px;
-}
-
-.backButton, .clearButton {
-  margin: 10px;
-  padding: 10px 20px;
-  border: none;
+.dropdown_content a:hover {
   background-color: #52a7bc;
   color: white;
-  cursor: pointer;
-}
-
-.clearButton {
-  background-color: #ff4d4d; /* Red color for clear button */
 }

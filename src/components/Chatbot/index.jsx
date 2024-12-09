@@ -85,7 +85,6 @@ const Chatbot = () => {
     localStorage.setItem("savedMessages", JSON.stringify(updatedSavedMessages));
   };
 
-
   // إضافة رسالة إلى الـ Favourite Messages
   const handleFavouriteMessage = (msg) => {
     setFavouriteMessages((prevFav) => [...prevFav, msg]);
@@ -196,7 +195,6 @@ const Chatbot = () => {
           <div className={styles.iconsRight}>
             <img
               src="https://www.flaticon.com/download/icon/9333991?icon_id=9333991&author=1294&team=1294&keyword=Send&pack=9333862&style=1&style_id=1370&format=png&color=%23000000&colored=1&size=512&selection=1&type=standard&token=03AFcWeA4sINaafmg6j4sGYxvhHe0ubt4ntLJaeokNtm8ka1gvUjMNWsWYyeYMwb4JtiS4R2evrSe5LQ1qbTCRVwOwQwqa1JrwuseCJZJrWuHdHPTBu9cHf4WiD57rd72B_fHZuokqir9Ug3HBiDWmw9OIp5QRathHg4NLbm85VyP6u5_np2RZI_AQxYaCMaO9AIKWUBpkthMuGAT-eyfpmpLLkudBV8li2_89zhgC6CgXtXkKZgY0ypn45XrPRKijrr4IfzKVbOKypOn-QZh9SvVunkjk_sOfpkZjmMZFCub4lQx5CUrz0XwoxI-aWgD7IUesIBG3dLsHycIMoII-yiY8qeCvN-_1W4FlrWQuuBiaOOJVelrY8zLi2-9Gd_lrI2_i6ZpTlVIRK35OSboFnNrwmAnHW5vc0va7SQ-FY71tVdu_0PzAMy_SVJcF_WM7JDcN-WYAng1ZRA5wVu98jTtEnAaztWeCpEXxd5WqewQjT_7xE1qK7reFmpo7AxIWd4ToGU8VDFMjVebVRjtXfMpSwzKKajx_FwLVdpOihEQhU3DNbfZq0vrH5d2TYx07vBEShJSEsW4TQ7qXH0bVFqueg0z6YzURT9gZ_vcpeoGNRhgtZv-byD_ziXTknTb4BwgBpRVMMOKJepA_lqr27U_TLIp6bK4NpDMgeuEGn6MBU1hArZTyEFrHkFcqTkCfJwAjQv8Z6qGBUa5BbKDGIVgekHf7rZPraqJoMaqQ7cKIgTd23rctrp3MYSRcjWdxOJWBSKtqI9o-2B671_Blq7_9dzZxd8fBDkSR-XX9ZNpcog06Owxld_NHUXOPtC1gl9ZQsUW0ivCb6tAJ6_vGtLEo-entG2t1ArpL7DWdhnTq3ToGFWYXSUZ6j3c1SKVSFQ_OTFqx3giG1-kdqvSwYiHeNO9Tu45zMrEoGOk9niLCLqbxDXsMB1lDXJk7Biqf69nzhlLNmgyo__Y7B49juKGt46MvHfbcireA78RnvlNeDnx_ANrIjsX1qgyTq-wi_f0iYwZ_kUrW4gFWCeDnKEgrVb2ncQi20FCLePo1P12GAWzP4It_OqGv9ppPwkx0B54iZebyPpbXX1s-DKon48PLmuSCiY-csufoiwf9Gaz_pz6ewpbF8dCS9PmrS_YltrVrSA6j23xNIuB7uBEtnk7rz5A6Z5pfQkEjpgd4ePqxc1rTP25AmmtnAqNIR3PCaj8Iy9zG8NW_gjXQlqumEo5DUJFV0zTIC1oVXU7GUM7cpiakjio95XGcIjzUFQoAzMzGhKjudgcV8wcJHSXr77rF7B46sTL99ZAvgZs-V_f_HjhpBPB2mHJHri5BueMfnBTtguDCzPGcHUKpUu9B9DeGpqMeZHfeFWy82KazTLIeuZndaeKE6sJlQdJ41-rnvFHSLMVzqXMOQjgifcxDychvChR-u6f5IW-JGs8uiSq6mbeb0LSeB4Ya8Ivv1XWslkn9zxFO0x7WimsELOP8aX9pseOo0o7VV3bZ1DeTigq2hLOs-3f0rLpYZTnuCQZ9h19L-Qnorjl6TJRtv9JGyDxKVmnOheiWZkLaapVveqClXZLU4kFBHjX5MY_9Lv9n9OU9GAfI56wn6KZ51SgEbracTFG1rgYmNQR0lnup2KLhOv3zNrhhgjIoDGISPYe7moILmhwDypUE4DDZJBH_YXbpewA_8LzgWy9LAbLWIfDjOhZDIbFvZqf_8E_eY_QrvV3OA5DlLSg4eNwWO9_sRMmxO9LNzSSfvUsOwBzZsD9rgfOxDUMbpI4DBh4_2VDieqqtZuUYwx9kKtDH_sL_z-Q0PRfvrtf5xDKzYavIAt0oMRRaGYdtxS4tO21od5Dj_eMTfxcFMnQtb60ZFaDY2Or7mwiJCu3gO7o7hI1AaX7ZiTXJml2ccmLxRiKc9T4aWQbIp06X1P&search=send"
-              alt="Send"
               onClick={sendMessage}
               className={styles.sendIcon}
             />
