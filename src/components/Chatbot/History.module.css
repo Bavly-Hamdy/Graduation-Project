@@ -1,0 +1,60 @@
+.pageContainer {
+  padding: 20px;
+  max-width: 800px;
+  margin: auto;
+}
+
+.title {
+  font-size: 24px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.historyList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.historyItem {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: #f9f9f9;
+  transition: background-color 0.2s;
+}
+
+.historyItem:hover {
+  background-color: #ececec;
+}
+
+.chatPreview {
+  margin: 0;
+  font-size: 16px;
+}
+
+.noHistory {
+  text-align: center;
+  font-size: 18px;
+  color: #777;
+}
+
+.buttonsContainer {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.clearButton {
+  background-color: #ff4d4d;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.clearButton:hover {
+  background-color: #ff1a1a;
+}

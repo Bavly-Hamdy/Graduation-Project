@@ -33,9 +33,11 @@ input, textarea, select {
 }
 
 .logo {
-  color: white;
-  font-size: 25px;
-  cursor: pointer;
+    font-size: 25px;
+    font-weight: bold;
+    cursor: pointer;
+    color: white;
+    text-transform: uppercase;
 }
 
 /* Navbar Links Section */
@@ -64,20 +66,13 @@ input, textarea, select {
   align-items: center;
   position: relative;
   cursor: pointer;
-  margin-left: 20px;
 }
 
 /* User Icon Style (دائرة تمثل نوع المستخدم) */
 .user_icon {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background-color: #f1f1f1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  width: 70px;
+  font-size: 22px;
   color: white;
-  font-size: 1.2rem;
   cursor: pointer;
   margin-left: 20px;
 }
@@ -86,25 +81,31 @@ input, textarea, select {
   display: flex;
   flex-direction: column;
   position: absolute;
-  top: 50px;
+  top: 40px;
   right: 0;
-  background-color: white;
+  background-color: #fff;
   min-width: 160px;
-  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
-  z-index: 1;
-  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  padding: 10px;
+  z-index: 10;
 }
 
 .dropdown_content a {
-  padding: 10px;
+  display: block;
+  padding: 8px 15px;
   text-decoration: none;
-  color: black;
-  border-radius: 5px;
+  color: #333;
+  font-size: 16px;
+  transition: background-color 0.3s;
 }
 
 .dropdown_content a:hover {
   background-color: #52a7bc;
   color: white;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  border-radius: 5px;
 }
 
 /* Sidebar Styles */

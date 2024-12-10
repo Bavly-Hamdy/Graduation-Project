@@ -1,0 +1,135 @@
+/* Page Container */
+.pageContainer {
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+/* Title */
+.title {
+  text-align: center;
+  font-size: 28px;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+/* Message Table */
+.messageTable {
+  width: 100%;
+  margin-top: 20px;
+}
+
+/* Table Header */
+.tableHeader {
+  display: flex;
+  padding: 20px;
+  background-color: #f1f1f1;
+  border-radius: 8px;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.columnHeader {
+  font-weight: bold;
+  width: 48%;
+  text-align: center;
+  color: #555;
+}
+
+/* Message Row */
+.messageRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  padding: 15px;
+  background-color: #fff;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.messageRow:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Message Text */
+.messageText {
+  width: 48%;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+}
+
+.messageText:hover {
+  background-color: #eaeaea;
+}
+
+/* Action Icons */
+.actionIcons {
+  width: 48%;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+.deleteButton, .saveButton {
+  background: none;
+  border: none;
+  font-size: 22px;
+  cursor: pointer;
+  transition: color 0.3s, transform 0.3s;
+}
+
+.deleteButton:hover, .saveButton:hover {
+  color: #ff4d4d;
+  transform: scale(1.2);
+}
+
+.saveButton:hover {
+  color: #45a049;
+}
+
+
+/* Buttons Container */
+.buttonsContainer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 30px;
+}
+
+.backButton, .clearButton {
+  padding: 12px 25px;
+  background-color: #4CAF50;
+  color: white;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+.backButton:hover, .clearButton:hover {
+  background-color: #45a049;
+  transform: scale(1.05);
+}
+
+.clearButton {
+  background-color: #f44336;
+}
+
+.clearButton:hover {
+  background-color: #e53935;
+}
+
+/* No Messages */
+.noMessages {
+  text-align: center;
+  color: #777;
+  font-size: 18px;
+  font-style: italic;
+}
