@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth"; // استيراد updateProfile
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { ref, set } from "firebase/database"; // Import Realtime Database functions
 import styles from "./styles.module.css";
-import { auth } from "../../firebaseConfig"; // استيراد firebase auth
+import { auth, realTimeDb } from "../../firebaseConfig"; // Import realTimeDb
 
 const Signup = () => {
   const [data, setData] = useState({
@@ -30,13 +31,26 @@ const Signup = () => {
       return;
     }
     try {
-      // استخدام Firebase Auth لإنشاء حساب جديد
+      // Create the user with Firebase Auth
       const userCredential = await createUserWithEmailAndPassword(auth, data.email, data.password);
       const user = userCredential.user;
       
-      // تحديث اسم المستخدم
+      // Update the user's profile with the full name
       await updateProfile(user, { displayName: data.fullName });
-      
+
+      // Store user data in Firebase Realtime Database
+      const userRef = ref(realTimeDb, 'Users/' + user.uid); // Use the user's UID as the unique key
+      await set(userRef, {
+        fullName: data.fullName,
+        email: data.email,
+        age: data.age,
+        weight: data.weight,
+        gender: data.gender,
+        height: data.height,
+        healthConditions: data.healthConditions,
+      });
+
+      // Navigate to the login page after successful signup
       navigate("/login");
     } catch (error) {
       setError(error.message);
