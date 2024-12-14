@@ -78,10 +78,10 @@ const Login = () => {
           </form>
           <div className={styles.social_login}>
             <button className={styles.social_btn} onClick={handleFacebookLogin}>
-              <FontAwesomeIcon icon={faFacebook} /> Login with Facebook
+              <FontAwesomeIcon icon={faFacebook}  /> &nbsp; Login with Facebook
             </button>
             <button className={styles.social_btn} onClick={handleGoogleLogin}>
-              <FontAwesomeIcon icon={faGoogle} /> Login with Google
+              <FontAwesomeIcon icon={faGoogle} /> &nbsp; Login with Google
             </button>
           </div>
         </div>
