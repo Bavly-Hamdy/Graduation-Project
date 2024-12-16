@@ -1,0 +1,204 @@
+.settingsContainer {
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #ffffff; /* Clean white background */
+    border-radius: 8px; /* Slightly rounded corners */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Soft shadow */
+    height: 100vh; /* Full height */
+    overflow-y: auto; /* Scrollable content */
+}
+
+.settingsTitle {
+    font-size: 26px;
+    margin-bottom: 20px;
+    color: #333; /* Dark text for readability */
+    font-weight: bold; /* Bold title */
+}
+
+.settingOption {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 400px;
+    margin: 10px 0;
+    padding: 10px;
+    border: 1px solid #ddd; /* Light border for separation */
+    border-radius: 5px; /* Rounded corners */
+    background-color: #f9f9f9; /* Light background for options */
+    transition: background-color 0.2s; /* Smooth hover effect */
+}
+
+.settingOption:hover {
+    background-color: #f1f1f1; /* Slightly darker on hover */
+}
+
+.optionLabel {
+    font-size: 18px;
+    color: #555; /* Softer label color */
+}
+
+.languageList {
+    list-style: none; /* Remove default list styling */
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: 15px; /* Space between language options */
+}
+
+.languageList li {
+    cursor: pointer; /* Pointer cursor for clickable items */
+    padding: 8px 12px; /* Padding for a better clickable area */
+    border: 1px solid #ddd; /* Light border */
+    border-radius: 5px; /* Rounded corners */
+    background-color: #f0f0f0; /* Light background */
+    transition: background-color 0.2s; /* Smooth background change */
+}
+
+.languageList li:hover {
+    background-color: #d1d1d1; /* Darker background on hover */
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 34px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: #4CAF50; /* Green when checked */
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+/* Button Styles */
+.button {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px; /* Rounded corners */
+    cursor: pointer;
+    font-size: 16px;
+    color: white; /* Text color */
+    transition: background-color 0.3s, transform 0.2s; /* Smooth background and scale transition */
+    font-weight: bold; /* Bold text for emphasis */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+}
+
+.deleteButton {
+    padding: 12px 25px;
+    background-color: #c0392b;
+    color: white;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.deleteButton:hover {
+    background-color: #eb4c3b; /* Darker red on hover */
+}
+
+.logoutButton {
+    padding: 12px 25px;
+    background-color: #2980b9;
+    color: white;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.logoutButton:hover {
+    background-color: #58a6da; /* Darker blue on hover */
+}
+
+.backButton {
+    padding: 12px 25px;
+    background-color: #7f8c8d;
+    color: white;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.backButton:hover {
+    background-color: #975e5e; /* Darker gray on hover */
+}
+
+/* Dark Mode Styles */
+.dark .settingsContainer {
+    background-color: #1e1e1e; /* Dark background */
+    color: white; /* Light text */
+}
+
+.dark .settingOption {
+    background-color: #2c2c2c; /* Darker background for options */
+    border: 1px solid #444; /* Slightly darker border */
+}
+
+.dark .optionLabel {
+    color: #ddd; /* Softer label color for dark mode */
+}
+
+.dark .languageList li {
+    background-color: #3a3a3a; /* Dark background for language options */
+    border: 1px solid #555; /* Darker border */
+}
+
+.dark .languageList li:hover {
+    background-color: #4a4a4a; /* Darker background on hover */
+}
+
+/* Responsive Styles */
+@media (max-width: 600px) {
+    .settingsContainer {
+        padding: 20px;
+    }
+
+    .settingsTitle {
+        font-size: 24px;
+    }
+
+    .optionLabel {
+        font-size: 16px;
+    }
+}

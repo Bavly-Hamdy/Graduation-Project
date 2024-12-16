@@ -17,7 +17,7 @@ const Chatbot = () => {
   const [history, setHistory] = useState([]);
 
   // قراءة الـ API Key من متغير البيئة
-  const apiKey = process.env.REACT_APP_OPENAI_API_KEY;
+  const apiKey = process.env.REACT_APP_API_KEY;
 
   // تبديل قائمة المستخدم
   const toggleDropdown = () => {
@@ -45,9 +45,9 @@ const Chatbot = () => {
 
     try {
       const response = await axios.post(
-        "https://api.openai.com/v1/chat/completions",
+        'https://api.openai.com/v1/chat/completions',
         {
-          model: "gpt-4",
+          model: "gpt-3.5-turbo",
           messages: [
             ...messages.map((msg) => ({
               role: msg.sender === "user" ? "user" : "assistant",
@@ -61,7 +61,7 @@ const Chatbot = () => {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${apiKey}`,
+            "Authorization": `Bearer ${apiKey}`,
           },
         }
       );
@@ -72,15 +72,18 @@ const Chatbot = () => {
         { text: botReply, sender: "bot" },
       ]);
 
+
       // حفظ المحادثة في التاريخ
       const updatedHistory = [...history, { userMessage, botReply }];
       setHistory(updatedHistory);
       localStorage.setItem("chatHistory", JSON.stringify(updatedHistory));
     } catch (error) {
-      console.error("Error sending message to ChatGPT:", error.response?.data || error);
+      console.error("Error sending message to ChatGPT:", error.response.status || error);
       alert(
         "حدث خطأ أثناء الاتصال بـ ChatGPT. تحقق من صلاحية API Key أو إعدادات الاتصال."
       );
+
+
     }
   };
 
