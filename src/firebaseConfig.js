@@ -1,7 +1,26 @@
-import { initializeApp } from "firebase/app"; // Initialize Firebase app first
-import { getAuth, GoogleAuthProvider, FacebookAuthProvider } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
-import { getDatabase } from "firebase/database";  // For Realtime Database
+import { initializeApp } from "firebase/app"; 
+import { 
+  getAuth, 
+  GoogleAuthProvider, 
+  FacebookAuthProvider 
+} from "firebase/auth";
+import { 
+  getFirestore, 
+  doc, 
+  getDoc, 
+  setDoc, 
+  collection, 
+  query, 
+  where, 
+  getDocs 
+} from "firebase/firestore";
+import { 
+  getDatabase, 
+  ref, 
+  set, 
+  push, 
+  onValue 
+} from "firebase/database";
 
 // Firebase configuration object
 const firebaseConfig = {
@@ -12,17 +31,35 @@ const firebaseConfig = {
   messagingSenderId: "361149223809",
   appId: "1:361149223809:web:58467e248f81422f97ce80",
   measurementId: "G-NRG6TMTB8Q",
-  databaseURL: "https://graduatinproject-default-rtdb.europe-west1.firebasedatabase.app", // Add this line
+  databaseURL: "https://graduatinproject-default-rtdb.europe-west1.firebasedatabase.app", 
 };
 
 // Initialize Firebase app
 const app = initializeApp(firebaseConfig);
 
-// Now initialize Firebase services (auth, firestore, etc.)
-const auth = getAuth(app);
+// Initialize Firebase services
+const auth = getAuth(app); // Firebase Authentication
 const googleProvider = new GoogleAuthProvider();
 const facebookProvider = new FacebookAuthProvider();
-const db = getFirestore(app); // Firestore
-const realTimeDb = getDatabase(app);  // Realtime Database
+const db = getFirestore(app); // Firestore Database
+const realTimeDb = getDatabase(app); // Realtime Database
 
-export { auth, googleProvider, facebookProvider, db, realTimeDb };
+// Export all initialized services and Firestore helpers
+export {
+  auth,
+  googleProvider,
+  facebookProvider,
+  db,
+  doc,
+  getDoc,
+  setDoc,
+  collection,
+  query,
+  where,
+  getDocs,
+  realTimeDb,
+  ref,
+  set,
+  push,
+  onValue,
+};

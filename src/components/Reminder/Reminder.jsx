@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom'; // استيراد useNavigate
+import { useNavigate } from 'react-router-dom';
 import styles from './Reminder.module.css';
 import { FaPlus, FaBell, FaFilePdf, FaTrash, FaEdit } from 'react-icons/fa';
 
-const notificationSound = new Audio('path/to/your/soundfile.mp3'); // Replace with your sound file path
+const notificationSound = new Audio('/Reminder.mp3'); // تأكد من المسار الصحيح
 
 const AddReminderModal = ({ isOpen, onClose, onAdd, reminderToEdit }) => {
   const [medication, setMedication] = useState(reminderToEdit ? reminderToEdit.medication : '');
@@ -49,7 +49,7 @@ const AddReminderModal = ({ isOpen, onClose, onAdd, reminderToEdit }) => {
 };
 
 const Reminder = () => {
-  const navigate = useNavigate(); // إنشاء دالة navigate
+  const navigate = useNavigate();
   const [reminders, setReminders] = useState(() => {
     const savedReminders = localStorage.getItem('reminders');
     return savedReminders ? JSON.parse(savedReminders) : [];
@@ -62,7 +62,7 @@ const Reminder = () => {
   });
   const [reminderToEdit, setReminderToEdit] = useState(null);
   const [showDropdown, setShowDropdown] = useState(false);
-  const [user, setUser] = useState(null); // Replace with actual user state
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     localStorage.setItem('reminders', JSON.stringify(reminders));
@@ -74,16 +74,16 @@ const Reminder = () => {
     if (notificationEnabled) {
       const interval = setInterval(() => {
         checkReminders();
-      }, 60000); // Check every minute
+      }, 60000);
       return () => clearInterval(interval);
     }
-  }, [notificationEnabled, reminders]);
+  }, [notificationEnabled, reminders, nextReminders]);
 
   const updateNextReminders = () => {
     const now = new Date();
     const upcoming = reminders.filter(reminder => {
       const reminderDate = new Date(`${reminder.date}T${reminder.time}`);
-      return reminderDate > now;
+      return reminderDate > now && !reminder.taken; 
     });
     setNextReminders(upcoming);
   };
@@ -93,10 +93,10 @@ const Reminder = () => {
     nextReminders.forEach(reminder => {
       const reminderDate = new Date(`${reminder.date}T${reminder.time}`);
       if (reminderDate <= now && !reminder.taken) {
-        notificationSound.play(); // Play notification sound
-        alert(`It's time to take your medication: ${reminder.medication}`); // Popup message
-        // Mark as taken to avoid repeated notifications
-        reminder.taken = true;
+        notificationSound.play();
+        alert(`It's time to take your medication: ${reminder.medication}`);
+        reminder.taken = true; 
+        updateNextReminders();
       }
     });
   };
@@ -128,6 +128,7 @@ const Reminder = () => {
     const updatedReminders = [...nextReminders];
     updatedReminders[index].taken = !updatedReminders[index].taken;
     setNextReminders(updatedReminders);
+    updateNextReminders();
   };
 
   const handleNotificationToggle = () => {
@@ -143,17 +144,13 @@ const Reminder = () => {
   };
 
   const handleLogout = () => {
-    // Implement logout functionality
     setUser(null);
   };
 
   return (
     <div className={styles.reminderContainer}>
-      {/* Navigation Bar */}
       <nav className={styles.navbar}>
-        <h1 className={styles.logo} onClick={() => navigate("/")}>
-          Logo
-        </h1>
+        <h1 className={styles.logo} onClick={() => navigate("/")}>Logo</h1>
         <ul className={styles.nav_links}>
           <li onClick={() => navigate("/chatbot")}>Chatbot</li>
           <li onClick={() => navigate("/reminder")}>Reminder</li>
@@ -176,7 +173,6 @@ const Reminder = () => {
 
       <h2 className={styles.title}>Medication Reminder</h2>
       
-      {/* First Table: Reminders */}
       <table className={styles.reminderTable}>
         <thead>
           <tr>
@@ -201,7 +197,6 @@ const Reminder = () => {
         </tbody>
       </table>
 
-      {/* Second Table: Next Reminders */}
       <h3 className={styles.title}>Next Reminders</h3>
       <table className={styles.reminderTable}>
         <thead>
@@ -230,7 +225,6 @@ const Reminder = () => {
         </tbody>
       </table>
 
-      {/* Action Buttons Below Tables */}
       <div className={styles.actions}>
         <button onClick={handleNotificationToggle}>
           <FaBell /> {notificationEnabled ? 'Disable Notifications' : 'Enable Notifications'}
@@ -248,7 +242,7 @@ const Reminder = () => {
           isOpen={isModalOpen} 
           onClose={() => setIsModalOpen(false)} 
           onAdd={handleAddOrUpdateReminder} 
-          reminderToEdit={reminderToEdit} // Pass the reminder to edit
+          reminderToEdit={reminderToEdit} 
         />
       }
     </div>
