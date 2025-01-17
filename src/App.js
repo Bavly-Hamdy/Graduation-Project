@@ -9,6 +9,7 @@ import FavouriteMessages from "./components/Chatbot/Favourite";
 import History from "./components/Chatbot/History";
 import Settings from "./components/Chatbot/Settings"; // Adjust the path as necessary
 import Reminder from './components/Reminder/Reminder'; // تأكد من المسار الصحيح
+import PlanAndPieChart from './components/PlanAndPieChart/PlanAndPieChart';
 
 
 function App() {
@@ -35,12 +36,14 @@ function App() {
         <Route path="/" element={<Navigate replace to="/login" />} />
       )}
       <Route path="/SavedMessages" element={<SavedMessages darkMode={darkMode} language={language} />} />
-      <Route path="/favourite" element={<FavouriteMessages darkMode={darkMode} language={language} />} />      
+      <Route path="/favourite" element={<FavouriteMessages darkMode={darkMode} language={language} />} />
       <Route path="/history" exact element={<History darkMode={darkMode} language={language} />} />
       <Route path="/signup" exact element={<Signup />} />
       <Route path="/login" exact element={<Login />} />
       <Route path="/settings" element={<Settings darkMode={darkMode} toggleDarkMode={toggleDarkMode} handleLogout={handleLogout} setLanguage={setLanguage} language={language} />} />
       <Route path="/reminder" element={<Reminder />} />
+      <Route path="/plan" element={<PlanAndPieChart />} />
+
     </Routes>
   );
 }
