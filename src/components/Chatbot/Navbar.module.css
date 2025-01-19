@@ -1,61 +1,70 @@
 /* Navbar.module.css */
 
 .navbar {
-    height: 70px;
-    padding: 0 20px;
-    margin: 0;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px 30px;
-    background-color: #52a7bc;
-    color: white;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-  }
-  
-  .logo {
-    font-size: 25px;
-    font-weight: bold;
-    cursor: pointer;
-    color: white;
-    text-transform: uppercase;
-  }
-  
-  .nav_links {
-    display: flex;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-  
-  .nav_links li {
-    color: white;
-    padding: 10px;
-    font-weight: bold;
-    margin-left: 20px;
-    cursor: pointer;
-    font-size: 16px;
-    transition: color 0.2s;
-  }
-  
-  .nav_links li:hover {
-    color: #cfcfcf;
-  }
-  
-  .user_menu {
-    display: flex;
-    align-items: center;
-    position: relative;
-    cursor: pointer;
-  }
-  
-  .user_icon {
-    font-size: 22px;
-    color: white;
-    cursor: pointer;
-    margin-left: 20px;
-  }
-  
+  height: 80px; /* Adjust height as needed */
+  background-color: #ffffff; /* White background */
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Space between logo and links */
+  padding: 0 100px; /* Add padding to the sides */
+  margin: 0;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
+/* Logo Style in Navbar */
+.logo {
+  color: #000000; /* Black text */
+  font-size: 28px; /* Adjust font size */
+  font-weight: 700; /* Bold font */
+  cursor: pointer;
+  font-family: 'Arial', sans-serif; /* Use a clean sans-serif font */
+}
+
+/* Navbar Links Section */
+.nav_links {
+  list-style-type: none;
+  display: flex;
+  gap: 40px; /* Space between links */
+  margin: 0;
+  padding: 0;
+  margin-left: auto; /* Push links to the right */
+}
+
+/* Each Navbar Item */
+.nav_links li {
+  color: #000000; /* Black text */
+  font-size: 18px; /* Adjust font size */
+  font-weight: 500; /* Medium font weight */
+  cursor: pointer;
+  transition: color 0.2s;
+  font-family: 'Arial', sans-serif; /* Use a clean sans-serif font */
+}
+
+.nav_links li:hover {
+  color: #52a7bc; /* Blue color on hover */
+}
+
+/* Optional: User Menu Section */
+.user_menu {
+  display: flex;
+  align-items: center;
+  position: relative;
+  cursor: pointer;
+  margin-left: 20px;
+  right: -50px;
+}
+
+/* User Icon Style */
+.user_icon {
+  padding-right: 50px;
+  font-size: 1.5rem;
+  color: #000000; /* Black icon */
+  cursor: pointer;
+}
   .dropdown_content {
     display: flex;
     flex-direction: column;

@@ -2,8 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './Reminder.module.css';
 import { FaPlus, FaBell, FaFilePdf, FaTrash, FaEdit } from 'react-icons/fa';
+import { realTimeDb, auth } from '../../firebaseConfig'; // Import realTimeDb and auth
+import { ref, push, set, onValue, remove, update } from 'firebase/database';
+import { onAuthStateChanged, signOut } from 'firebase/auth';
 
-const notificationSound = new Audio('/Reminder.mp3'); // تأكد من المسار الصحيح
+const notificationSound = new Audio('/Reminder.mp3'); // Ensure the path is correct
 
 const AddReminderModal = ({ isOpen, onClose, onAdd, reminderToEdit }) => {
   const [medication, setMedication] = useState(reminderToEdit ? reminderToEdit.medication : '');
@@ -11,7 +14,7 @@ const AddReminderModal = ({ isOpen, onClose, onAdd, reminderToEdit }) => {
   const [time, setTime] = useState(reminderToEdit ? reminderToEdit.time : '');
 
   const handleSubmit = () => {
-    onAdd({ medication, date, time, taken: reminderToEdit ? reminderToEdit.taken : false });
+    onAdd({ medication, date, time, taken: false }); // New reminders are not taken by default
     onClose();
   };
 
@@ -50,10 +53,7 @@ const AddReminderModal = ({ isOpen, onClose, onAdd, reminderToEdit }) => {
 
 const Reminder = () => {
   const navigate = useNavigate();
-  const [reminders, setReminders] = useState(() => {
-    const savedReminders = localStorage.getItem('reminders');
-    return savedReminders ? JSON.parse(savedReminders) : [];
-  });
+  const [reminders, setReminders] = useState([]);
   const [nextReminders, setNextReminders] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [notificationEnabled, setNotificationEnabled] = useState(() => {
@@ -64,87 +64,117 @@ const Reminder = () => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [user, setUser] = useState(null);
 
+  // Fetch reminders from Firebase
   useEffect(() => {
-    localStorage.setItem('reminders', JSON.stringify(reminders));
-    updateNextReminders();
-  }, [reminders]);
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser) {
+        setUser(currentUser);
+        const remindersRef = ref(realTimeDb, `reminders/${currentUser.uid}`); // Use realTimeDb
+        onValue(remindersRef, (snapshot) => {
+          const data = snapshot.val();
+          if (data) {
+            const remindersList = Object.keys(data).map(key => ({
+              id: key,
+              ...data[key]
+            }));
+            setReminders(remindersList);
+            updateNextReminders(remindersList); // Update next reminders
+          } else {
+            setReminders([]);
+            setNextReminders([]);
+          }
+        });
+      } else {
+        setUser(null);
+        setReminders([]);
+        setNextReminders([]);
+      }
+    });
 
-  useEffect(() => {
-    localStorage.setItem('notifications', notificationEnabled);
-    if (notificationEnabled) {
-      const interval = setInterval(() => {
-        checkReminders();
-      }, 60000);
-      return () => clearInterval(interval);
-    }
-  }, [notificationEnabled, reminders, nextReminders]);
+    return () => unsubscribe();
+  }, []);
 
-  const updateNextReminders = () => {
+  // Update next reminders
+  const updateNextReminders = (remindersList) => {
     const now = new Date();
-    const upcoming = reminders.filter(reminder => {
+    const upcoming = remindersList.filter(reminder => {
       const reminderDate = new Date(`${reminder.date}T${reminder.time}`);
-      return reminderDate > now && !reminder.taken; 
+      return reminderDate > now && !reminder.taken; // Only show upcoming and not taken reminders
     });
     setNextReminders(upcoming);
   };
 
-  const checkReminders = () => {
-    const now = new Date();
-    nextReminders.forEach(reminder => {
-      const reminderDate = new Date(`${reminder.date}T${reminder.time}`);
-      if (reminderDate <= now && !reminder.taken) {
-        notificationSound.play();
-        alert(`It's time to take your medication: ${reminder.medication}`);
-        reminder.taken = true; 
-        updateNextReminders();
-      }
-    });
-  };
-
+  // Save reminders to Firebase
   const handleAddOrUpdateReminder = (reminder) => {
-    if (reminderToEdit) {
-      const updatedReminders = reminders.map((r, index) => 
-        index === reminderToEdit.index ? reminder : r
-      );
-      setReminders(updatedReminders);
+    if (user) {
+      const remindersRef = ref(realTimeDb, `reminders/${user.uid}`); // Use realTimeDb
+      if (reminderToEdit) {
+        const reminderRef = ref(realTimeDb, `reminders/${user.uid}/${reminderToEdit.id}`); // Use realTimeDb
+        update(reminderRef, reminder);
+      } else {
+        push(remindersRef, {
+          ...reminder,
+          addedBy: user.displayName || user.email,
+        });
+      }
+      setIsModalOpen(false);
       setReminderToEdit(null);
-    } else {
-      setReminders([...reminders, reminder]);
     }
-    setIsModalOpen(false);
   };
 
-  const handleDeleteReminder = (index) => {
-    const updatedReminders = reminders.filter((_, i) => i !== index);
-    setReminders(updatedReminders);
+  // Delete reminder from Firebase
+  const handleDeleteReminder = (id) => {
+    if (user) {
+      const reminderRef = ref(realTimeDb, `reminders/${user.uid}/${id}`); // Use realTimeDb
+      remove(reminderRef);
+    }
   };
 
-  const handleEditReminder = (index) => {
-    setReminderToEdit({ ...reminders[index], index });
+  // Edit reminder
+  const handleEditReminder = (id) => {
+    const reminder = reminders.find(r => r.id === id);
+    setReminderToEdit(reminder);
     setIsModalOpen(true);
   };
 
-  const toggleTaken = (index) => {
-    const updatedReminders = [...nextReminders];
-    updatedReminders[index].taken = !updatedReminders[index].taken;
-    setNextReminders(updatedReminders);
-    updateNextReminders();
+  // Toggle taken status
+  const toggleTaken = (id) => {
+    if (user) {
+      const reminderRef = ref(realTimeDb, `reminders/${user.uid}/${id}`); // Use realTimeDb
+      const reminder = reminders.find(r => r.id === id);
+      const updatedReminder = { ...reminder, taken: !reminder.taken };
+      update(reminderRef, { taken: updatedReminder.taken });
+      setReminders(prevReminders =>
+        prevReminders.map(r => (r.id === id ? updatedReminder : r))
+      );
+      updateNextReminders(reminders.map(r => (r.id === id ? updatedReminder : r))); // Update next reminders
+    }
   };
 
-  const handleNotificationToggle = () => {
-    setNotificationEnabled(!notificationEnabled);
-  };
-
-  const handlePrint = () => {
-    window.print();
-  };
-
+  // Toggle dropdown
   const toggleDropdown = () => {
     setShowDropdown(!showDropdown);
   };
 
+  // Handle logout
   const handleLogout = () => {
-    setUser(null);
+    signOut(auth).then(() => {
+      setUser(null);
+      navigate('/login'); // Redirect to login page after logout
+    }).catch((error) => {
+      console.error("Error logging out:", error);
+    });
+  };
+
+  // Toggle notifications
+  const handleNotificationToggle = () => {
+    setNotificationEnabled(!notificationEnabled);
+    localStorage.setItem('notifications', !notificationEnabled);
+  };
+
+  // Handle print
+  const handlePrint = () => {
+    window.print();
   };
 
   return (
@@ -173,30 +203,34 @@ const Reminder = () => {
 
       <h2 className={styles.title}>Medication Reminder</h2>
       
+      {/* All Reminders Table */}
       <table className={styles.reminderTable}>
         <thead>
           <tr>
             <th>Medication/Test</th>
             <th>Date</th>
             <th>Time</th>
+            <th>Added By</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
-          {reminders.map((reminder, index) => (
-            <tr key={index}>
+          {reminders.map((reminder) => (
+            <tr key={reminder.id}>
               <td>{reminder.medication}</td>
               <td>{reminder.date}</td>
               <td>{reminder.time}</td>
+              <td>{reminder.addedBy}</td>
               <td>
-                <button onClick={() => handleEditReminder(index)}><FaEdit /></button>
-                <button onClick={() => handleDeleteReminder(index)}><FaTrash /></button>
+                <button onClick={() => handleEditReminder(reminder.id)}><FaEdit /></button>
+                <button onClick={() => handleDeleteReminder(reminder.id)}><FaTrash /></button>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
 
+      {/* Next Reminders Table */}
       <h3 className={styles.title}>Next Reminders</h3>
       <table className={styles.reminderTable}>
         <thead>
@@ -217,7 +251,7 @@ const Reminder = () => {
                 <input 
                   type="checkbox" 
                   checked={reminder.taken} 
-                  onChange={() => toggleTaken(index)} 
+                  onChange={() => toggleTaken(reminder.id)} 
                 />
               </td>
             </tr>

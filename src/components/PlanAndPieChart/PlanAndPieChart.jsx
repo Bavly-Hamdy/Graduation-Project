@@ -4,9 +4,8 @@ import jsPDF from "jspdf";
 import styles from "./styles.module.css";
 import { useNavigate } from "react-router-dom";
 import { Doughnut, Bar } from "react-chartjs-2";
-import { auth } from "../../firebaseConfig";
-import { getFirestore, collection, doc, setDoc, getDoc } from "firebase/firestore";
-import { db } from "../../firebaseConfig";
+import { realTimeDb, auth } from "../../firebaseConfig"; // Import realTimeDb and auth
+import { ref, onValue, set } from "firebase/database"; // Import Firebase Realtime Database functions
 import { onAuthStateChanged } from "firebase/auth";
 import {
   Chart as ChartJS,
@@ -106,24 +105,24 @@ const PlanAndPieChart = () => {
         <input
           type="number"
           id="sugarLevelInput"
-          value={sugarLevel || ''}  // تأكد من أن القيمة ستظهر بشكل صحيح
-          onChange={(e) => setSugarLevel(e.target.value === '' ? '' : parseInt(e.target.value))}  // تعيين القيمة المدخلة بشكل صحيح
+          value={sugarLevel || ''}
+          onChange={(e) => setSugarLevel(e.target.value === '' ? '' : parseInt(e.target.value))}
           placeholder="Enter your sugar level"
-          min="1"  // تأكد من أن القيمة تكون أكبر من 0
+          min="1"
         />
         <button
           onClick={async () => {
-            // تحقق من أن مستوى السكر المدخل صالح
             if (isNaN(sugarLevel) || sugarLevel <= 0) {
               alert("Please enter a valid sugar level.");
-              return; // إيقاف التنفيذ إذا كانت القيمة غير صالحة
+              return;
             }
-  
-            const docRef = doc(db, "patients", user.uid);
+
+            // Save sugar level to Firebase Realtime Database
+            const sugarLevelRef = ref(realTimeDb, `Users/${user.uid}/sugarLevel`);
             try {
-              await setDoc(docRef, { sugarLevel }, { merge: true });
+              await set(sugarLevelRef, sugarLevel); // Use `set` from Firebase Realtime Database
               alert("Sugar level added successfully!");
-              setShowModal(false);  // إغلاق النافذة بعد إضافة السكر
+              setShowModal(false);
             } catch (error) {
               console.error("Error adding sugar level: ", error);
             }
@@ -133,9 +132,8 @@ const PlanAndPieChart = () => {
         </button>
       </div>
     );
-    setShowModal(true);  // فتح النافذة المنبثقة
+    setShowModal(true);
   };
-  
 
   const generateDailyPlan = () => {
     const plan = [
@@ -162,19 +160,37 @@ const PlanAndPieChart = () => {
   };
 
   const printPatientInfo = async () => {
-    const docRef = doc(db, "patients", user.uid);
-    const docSnap = await getDoc(docRef);
-    if (docSnap.exists()) {
-      const data = docSnap.data();
-      const doc = new jsPDF();
-      doc.text("Patient Information", 10, 10);
-      doc.text(`Name: ${data.name}`, 10, 20);
-      doc.text(`Age: ${data.age}`, 10, 30);
-      doc.text(`Sugar Level: ${data.sugarLevel || "N/A"}`, 10, 40);
-      doc.save("patient_info.pdf");
-    } else {
-      alert("No patient data found!");
+    if (!user) {
+      alert("No user logged in!");
+      return;
     }
+
+    console.log("Fetching user data from Firebase Realtime Database...");
+
+    // Fetch user data from Firebase Realtime Database
+    const userRef = ref(realTimeDb, `Users/${user.uid}`);
+    onValue(userRef, (snapshot) => {
+      const userData = snapshot.val();
+      console.log("User data fetched:", userData);
+
+      if (userData) {
+        // Generate PDF
+        const doc = new jsPDF();
+        doc.setFontSize(16);
+        doc.text("Patient Information", 10, 10);
+        doc.setFontSize(12);
+        doc.text(`Full Name:${user.fullName}`, 10, 20);
+        doc.text(`Email: ${user.email}`, 10, 30);
+        doc.text(`Age: ${user.age}`, 10, 40);
+        doc.text(`Gender: ${user.gender}`, 10, 50);
+        doc.text(`Height: ${user.height}cm`, 10, 60);
+        doc.text(`Weight: ${user.weight} kg`, 10, 70);
+        doc.text(`Health Conditions: ${user.healthConditions}`, 10, 80);
+        doc.save("patient_info.pdf");
+      }
+    }, {
+      onlyOnce: true, // Fetch data only once
+    });
   };
 
   return (

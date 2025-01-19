@@ -16,26 +16,21 @@ const Chatbot = () => {
   const [favouriteMessages, setFavouriteMessages] = useState([]);
   const [history, setHistory] = useState([]);
 
-  // قراءة الـ API Key من متغير البيئة
   const apiKey = process.env.REACT_APP_API_KEY;
 
-  // تبديل قائمة المستخدم
   const toggleDropdown = () => {
     setShowDropdown((prevState) => !prevState);
   };
 
-  // تسجيل الخروج
   const handleLogout = () => {
     localStorage.removeItem("token");
     navigate("/login");
   };
 
-  // تبديل الوضع الداكن
   const toggleDarkMode = () => {
     setDarkMode(!darkMode);
   };
 
-  // إرسال الرسالة والحصول على الرد من ChatGPT
   const sendMessage = async () => {
     if (!message.trim()) return;
 
@@ -45,7 +40,7 @@ const Chatbot = () => {
 
     try {
       const response = await axios.post(
-        'https://api.openai.com/v1/chat/completions',
+        "https://api.openai.com/v1/chat/completions",
         {
           model: "gpt-3.5-turbo",
           messages: [
@@ -61,7 +56,7 @@ const Chatbot = () => {
         {
           headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${apiKey}`,
+            Authorization: `Bearer ${apiKey}`,
           },
         }
       );
@@ -72,22 +67,17 @@ const Chatbot = () => {
         { text: botReply, sender: "bot" },
       ]);
 
-
-      // حفظ المحادثة في التاريخ
       const updatedHistory = [...history, { userMessage, botReply }];
       setHistory(updatedHistory);
       localStorage.setItem("chatHistory", JSON.stringify(updatedHistory));
     } catch (error) {
-      console.error("Error sending message to ChatGPT:", error.response.status || error);
+      console.error("Error sending message to ChatGPT:", error.response?.status || error);
       alert(
         "حدث خطأ أثناء الاتصال بـ ChatGPT. تحقق من صلاحية API Key أو إعدادات الاتصال."
       );
-
-
     }
   };
 
-  // إضافة رسالة إلى الـ Saved Messages
   const handleSaveMessage = (msg) => {
     const savedMessages = JSON.parse(localStorage.getItem("savedMessages")) || [];
     const updatedSavedMessages = [...savedMessages, msg];
@@ -95,7 +85,6 @@ const Chatbot = () => {
     localStorage.setItem("savedMessages", JSON.stringify(updatedSavedMessages));
   };
 
-  // إضافة رسالة إلى الـ Favourite Messages
   const handleFavouriteMessage = (msg) => {
     const favourites = JSON.parse(localStorage.getItem("favouriteMessages")) || [];
     const updatedFavourites = [...favourites, msg];
@@ -103,7 +92,6 @@ const Chatbot = () => {
     localStorage.setItem("favouriteMessages", JSON.stringify(updatedFavourites));
   };
 
-  // متابعة حالة المستخدم
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       if (currentUser) {
@@ -116,14 +104,19 @@ const Chatbot = () => {
   }, []);
 
   useEffect(() => {
-    // تحميل السجل المحفوظ من localStorage عند بدء التشغيل
     const savedHistory = JSON.parse(localStorage.getItem("history")) || [];
     setHistory(savedHistory);
   }, []);
 
-  // بدء محادثة جديدة
   const startNewChat = () => {
-    setMessages([]); // مسح المحادثات السابقة
+    setMessages([]);
+  };
+
+  // Handle Enter key press
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      sendMessage();
+    }
   };
 
   return (
@@ -201,9 +194,8 @@ const Chatbot = () => {
         </div>
         <div className={styles.messageBox}>
           <div className={styles.iconsLeft}>
-            {/* Upload و Voice Icons داخل شريط الرسالة */}
             <img
-              src="https://www.flaticon.com/download/icon/154611?icon_id=154611&author=163&team=163&keyword=Paperclip&pack=154586&style=1&style_id=5&format=png&color=%23000000&colored=1&size=512&selection=1&type=standard"
+              src="https://icons.iconarchive.com/icons/iconoir-team/iconoir/128/attachment-icon.png"
               alt="Upload"
               className={styles.icon}
             />
@@ -217,11 +209,12 @@ const Chatbot = () => {
             type="text"
             value={message}
             onChange={(e) => setMessage(e.target.value)}
+            onKeyPress={handleKeyPress} // Add this line
             placeholder="Type a message..."
           />
           <div className={styles.iconsRight}>
             <img
-              src=""
+              src="https://icons.iconarchive.com/icons/icons8/ios7/128/Arrows-Right-2-icon.png"
               onClick={sendMessage}
               className={styles.sendIcon}
             />
