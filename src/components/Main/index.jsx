@@ -2,21 +2,19 @@ import { useEffect, useState } from "react";
 import styles from "./styles.module.css";
 import { useNavigate } from "react-router-dom";
 import { Doughnut } from "react-chartjs-2";
-import { auth } from "../../firebaseConfig"; // استيراد تكوين Firebase
-import { onAuthStateChanged } from "firebase/auth"; // استيراد دالة التحقق من حالة المستخدم
-import {
-  Chart as ChartJS,
-  ArcElement,
-  Tooltip,
-  Legend,
-} from "chart.js";
+import { auth } from "../../firebaseConfig"; // Firebase configuration
+import { onAuthStateChanged } from "firebase/auth"; // Firebase auth state listener
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const Main = () => {
   const navigate = useNavigate();
-  const [user, setUser] = useState(null); // اجعل المستخدم null في البداية
-  const [showDropdown, setShowDropdown] = useState(false);
+  const [user, setUser] = useState(null); // User state
+  const [showDropdown, setShowDropdown] = useState(false); // Dropdown state
+  const [showScrollUp, setShowScrollUp] = useState(false); // Scroll-to-top button state
+
+  // Pie chart data
   const [pieData, setPieData] = useState({
     labels: ["Segment 1", "Segment 2", "Segment 3", "Segment 4", "Segment 5"],
     datasets: [
@@ -34,6 +32,7 @@ const Main = () => {
     ],
   });
 
+  // Pie chart options
   const options = {
     cutout: "50%",
     responsive: true,
@@ -58,31 +57,18 @@ const Main = () => {
     },
   };
 
+  // Handle logout
   const handleLogout = () => {
     localStorage.removeItem("token");
     navigate("/login");
   };
 
+  // Toggle dropdown
   const toggleDropdown = () => {
     setShowDropdown((prevState) => !prevState);
   };
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      if (currentUser) {
-        console.log("User is logged in:", currentUser); // تسجيل المستخدم في الكونسول
-        setUser(currentUser); // قم بتعيين الكائن الكامل للمستخدم
-      } else {
-        console.log("No user is logged in");
-        setUser(null);
-      }
-    });
-
-    return () => unsubscribe(); // تنظيف الاشتراك عند الت unmount
-  }, []);
-
-  const [showScrollUp, setShowScrollUp] = useState(false);
-
+  // Handle scroll for scroll-to-top button
   const handleScroll = () => {
     if (window.scrollY > 200) {
       setShowScrollUp(true);
@@ -91,14 +77,31 @@ const Main = () => {
     }
   };
 
+  // Scroll to top
   const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
+  // Firebase auth state listener
   useEffect(() => {
-    window.addEventListener('scroll', handleScroll);
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser) {
+        console.log("User is logged in:", currentUser);
+        setUser(currentUser);
+      } else {
+        console.log("No user is logged in");
+        setUser(null);
+      }
+    });
+
+    return () => unsubscribe(); // Cleanup on unmount
+  }, []);
+
+  // Add scroll event listener
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener("scroll", handleScroll);
     };
   }, []);
 
@@ -106,21 +109,24 @@ const Main = () => {
     <div className={styles.main_container}>
       {/* Navbar Section */}
       <nav className={styles.navbar}>
+        {/* Logo on the left */}
         <h1 className={styles.logo} onClick={() => navigate("/")}>
           Logo
         </h1>
+
+        {/* Navigation links on the right */}
         <ul className={styles.nav_links}>
           <li onClick={() => navigate("/chatbot")}>Chatbot</li>
           <li onClick={() => navigate("/reminder")}>Reminder</li>
-          <li onClick={() => navigate("/plan")}>Plan & Bay Chart</li>
-          <li onClick={() => navigate("/about")}>About Us</li>
-          <li onClick={() => navigate("/contact")}>Contact Us</li>
+          <li onClick={() => navigate("/plan")}>Plan & Pie Chart</li>
+          <li onClick={() => navigate("/")}>About Us</li>
+          <li onClick={() => navigate("/")}>Contact Us</li>
         </ul>
+
+        {/* Optional: User menu (remove if not needed) */}
         <div className={styles.user_menu} onClick={toggleDropdown}>
           <div className={styles.user_icon}>
-            <i
-              className={`fas fa-${user ? "user" : "female"} fa-1x`}
-            ></i>
+            <i className={`fas fa-${user ? "user" : "female"} fa-1x`}></i>
           </div>
           {showDropdown && (
             <div className={styles.dropdown_content}>
@@ -134,7 +140,7 @@ const Main = () => {
       {/* Welcome Message Section */}
       <section className={styles.welcome_section}>
         <div className={styles.welcome_message}>
-          <h2>Welcome, {user ? user.displayName : "Guest"}!</h2> {/* استخدم displayName أو "Guest" */}
+          <h2>Welcome, {user ? user.displayName : "Guest"}!</h2>
           <p>Hope you're feeling better today!</p>
         </div>
       </section>
@@ -197,7 +203,6 @@ const Main = () => {
           </tbody>
         </table>
       </section>
-      
 
       {/* Scroll to Top Button */}
       {showScrollUp && (

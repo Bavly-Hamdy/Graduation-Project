@@ -390,4 +390,282 @@
 	text-align: center;
 	color: white;
   }
-  
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Navbar Section */
+.navbar {
+  height: 80px; /* Adjust height as needed */
+  background-color: #ffffff; /* White background */
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Space between logo and links */
+  padding: 0 100px; /* Add padding to the sides */
+  margin: 0;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
+/* Logo Style in Navbar */
+.logo {
+  color: #000000; /* Black text */
+  font-size: 28px; /* Adjust font size */
+  font-weight: 700; /* Bold font */
+  cursor: pointer;
+  font-family: 'Arial', sans-serif; /* Use a clean sans-serif font */
+}
+
+/* Navbar Links Section */
+.nav_links {
+  list-style-type: none;
+  display: flex;
+  gap: 40px; /* Space between links */
+  margin: 0;
+  padding: 0;
+  margin-left: auto; /* Push links to the right */
+}
+
+/* Each Navbar Item */
+.nav_links li {
+  color: #000000; /* Black text */
+  font-size: 18px; /* Adjust font size */
+  font-weight: 500; /* Medium font weight */
+  cursor: pointer;
+  transition: color 0.2s;
+  font-family: 'Arial', sans-serif; /* Use a clean sans-serif font */
+}
+
+.nav_links li:hover {
+  color: #52a7bc; /* Blue color on hover */
+}
+
+/* Optional: User Menu Section */
+.user_menu {
+  display: flex;
+  align-items: center;
+  position: relative;
+  cursor: pointer;
+  margin-left: 20px;
+  right: -50px;
+}
+
+/* User Icon Style */
+.user_icon {
+  padding-right: 50px;
+  font-size: 1.5rem;
+  color: #000000; /* Black icon */
+  cursor: pointer;
+}
+
+/* Dropdown Menu Style */
+.dropdown_content {
+  display: none;
+  flex-direction: column;
+  position: absolute;
+  top: 50px;
+  right: 0;
+  background-color: white;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+  border-radius: 5px;
+}
+
+.dropdown_content a {
+  padding: 10px;
+  text-decoration: none;
+  color: black;
+}
+
+.dropdown_content a:hover {
+  background-color: #52a7bc;
+  color: white;
+}
+
+.user_menu:hover .dropdown_content {
+  display: flex;
+}
+
+/* Welcome Section - Background and Position */
+.welcome_section {
+  position: fixed; /* Make the section fixed */
+  top: 0; /* Start from the top of the page */
+  left: 0;
+  width: 100%;
+  height: 100vh; /* Full screen height */
+  background-image: url("/public/wallpaper.jpg"); /* Background image */
+  background-size: cover; /* Cover the entire section */
+  background-position: center; /* Center the image */
+  z-index: -1; /* Place it behind the content */
+}
+
+/* Welcome Message Styling */
+.welcome_message {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1; /* Ensure text is above the image */
+  color: white;
+  text-align: center;
+  font-size: 2rem;
+  font-weight: bold;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+  padding: 20px 0 20px 0;
+  width: 100%;
+  border-radius: 10px;
+}
+
+/* Blurred Background Effect */
+.welcome_section::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("/public/wallpaper.jpg"); /* Same image as background */
+  background-size: cover;
+  background-position: center;
+  filter: blur(8px); /* Blur effect */
+  z-index: -1; /* Ensure it's behind the content */
+}
+
+/* Welcome Message Heading */
+.welcome_message h2 {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+}
+
+/* Welcome Message Paragraph */
+.welcome_message p {
+  font-size: 1.2rem;
+  margin-top: 10px;
+}
+
+/* Health Prediction Summary Section */
+.summary_section {
+  text-align: center;
+  font-size: 1.5rem;
+  color: white; /* White text */
+  font-weight: bold;
+  background-color: #333; /* Dark background */
+  padding: 20px 0; /* Add padding */
+  margin: 0; /* Remove margin */
+}
+
+/* Pie Chart Section */
+.chart_section {
+  text-align: center;
+  background-color: #333; /* Dark background */
+  color: white; /* White text */
+  padding: 20px 0; /* Add padding */
+  margin: 0; /* Remove margin */
+}
+
+.chart_container {
+  width: 100%;
+  height: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  position: relative;
+}
+
+/* Reminder Message Section */
+.reminder_section {
+  background-color: rgb(22, 22, 22); /* Dark gray background */
+  padding: 30px 0; /* Add padding */
+}
+
+.reminder_message {
+  margin: 20px;
+  font-size: 18px;
+  text-align: center;
+  color: white; /* White text */
+}
+
+/* Schedule Table Section */
+.schedule_table {
+  width: 80%;
+  margin: 0 auto;
+  text-align: center;
+  border-collapse: collapse;
+  margin-top: 20px;
+  margin-bottom: 30px;
+  background-color: white; /* White background */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  border-radius: 8px; /* Rounded corners */
+  overflow: hidden; /* Ensure rounded corners are visible */
+}
+
+/* Table Header and Cell Styles */
+.schedule_table th,
+.schedule_table td {
+  border: 1px solid #ddd;
+  padding: 12px 15px; /* Increased padding for better spacing */
+  text-align: center;
+  font-size: 16px; /* Slightly larger font size */
+}
+
+/* Table Header Styling */
+.schedule_table th {
+  background-color: #52a7bc;
+  color: white;
+  font-weight: 600; /* Bold font for headers */
+  text-transform: uppercase; /* Uppercase headers */
+  letter-spacing: 1px; /* Slight letter spacing */
+}
+
+/* Alternating Row Colors for Schedule Table */
+.schedule_table tr:nth-child(even) {
+  background-color: #f9f9f9; /* Lighter gray for even rows */
+}
+
+/* Table Row Hover Effect */
+.schedule_table tr:hover {
+  background-color: #f1f1f1; /* Light gray on hover */
+}
+
+/* Scroll to Top Button */
+.scrollToTop {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #52a7bc;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  font-size: 24px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  transition: opacity 0.3s ease;
+}
+
+.scrollToTop:hover {
+  background-color: #4a97a2;
+}
+
+.scrollToTop:active {
+  transform: scale(0.95);
+}
+
+/* Footer Section */
+.footer {
+  background-color: #333;
+  padding: 20px;
+  text-align: center;
+  color: white;
+  font-size: 14px;
+  margin-top: 40px; /* Added margin to separate from content */
+}
