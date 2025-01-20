@@ -179,13 +179,13 @@ const PlanAndPieChart = () => {
         doc.setFontSize(16);
         doc.text("Patient Information", 10, 10);
         doc.setFontSize(12);
-        doc.text(`Full Name:${user.fullName}`, 10, 20);
-        doc.text(`Email: ${user.email}`, 10, 30);
-        doc.text(`Age: ${user.age}`, 10, 40);
-        doc.text(`Gender: ${user.gender}`, 10, 50);
-        doc.text(`Height: ${user.height}cm`, 10, 60);
-        doc.text(`Weight: ${user.weight} kg`, 10, 70);
-        doc.text(`Health Conditions: ${user.healthConditions}`, 10, 80);
+        doc.text(`Full Name:${userData.fullName}`, 10, 20);
+        doc.text(`Email: ${userData.email}`, 10, 30);
+        doc.text(`Age: ${userData.age}`, 10, 40);
+        doc.text(`Gender: ${userData.gender}`, 10, 50);
+        doc.text(`Height: ${userData.height}cm`, 10, 60);
+        doc.text(`Weight: ${userData.weight} kg`, 10, 70);
+        doc.text(`Health Conditions: ${userData.healthConditions}`, 10, 80);
         doc.save("patient_info.pdf");
       }
     }, {

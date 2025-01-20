@@ -167,14 +167,14 @@
 
 /* Navbar Section */
 .navbar {
-    height: 80px; /* Adjust height as needed */
-    background-color: #ffffff; /* White background */
+    height: 70px;
+    background-color: #ffffff;
     display: flex;
     align-items: center;
-    justify-content: space-between; /* Space between logo and links */
-    padding: 0 100px; /* Add padding to the sides */
+    justify-content: space-between;
+    padding: 0 20px;
     margin: 0;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     position: fixed;
     top: 0;
     width: 100%;
@@ -183,53 +183,54 @@
   
   /* Logo Style in Navbar */
   .logo {
-    color: #000000; /* Black text */
-    font-size: 28px; /* Adjust font size */
-    font-weight: 700; /* Bold font */
+    display: flex;
+    align-items: center;
+    font-weight: 700;
+    color: #233348;
+    font-size: 24px;
+    line-height: 125%;
     cursor: pointer;
-    font-family: 'Arial', sans-serif; /* Use a clean sans-serif font */
+  }
+  
+  .logo__logo-img {
+    padding-right: 12px;
   }
   
   /* Navbar Links Section */
   .nav_links {
     list-style-type: none;
     display: flex;
-    gap: 40px; /* Space between links */
-    margin: 0;
-    padding: 0;
-    margin-left: auto; /* Push links to the right */
+    gap: 20px;
   }
   
   /* Each Navbar Item */
   .nav_links li {
-    color: #000000; /* Black text */
-    font-size: 18px; /* Adjust font size */
-    font-weight: 500; /* Medium font weight */
+    color: #7D7987;
+    padding: 10px;
+    font-weight: 400;
+    font-size: 18px;
     cursor: pointer;
     transition: color 0.2s;
-    font-family: 'Arial', sans-serif; /* Use a clean sans-serif font */
+    border-bottom: 2px solid transparent;
   }
   
   .nav_links li:hover {
-    color: #52a7bc; /* Blue color on hover */
+    color: #1F1534;
+    border-bottom: 2px solid #1F1534;
   }
   
-  /* Optional: User Menu Section */
+  /* User Menu Section */
   .user_menu {
     display: flex;
     align-items: center;
     position: relative;
     cursor: pointer;
     margin-left: 20px;
-    right: -50px;
   }
   
-  /* User Icon Style */
   .user_icon {
-    padding-right: 50px;
-    font-size: 1.5rem;
-    color: #000000; /* Black icon */
-    cursor: pointer;
+    font-size: 18px;
+    color: #1F1534;
   }
 .send_icon {
     font-size: 20px;
