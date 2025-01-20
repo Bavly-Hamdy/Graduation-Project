@@ -108,42 +108,39 @@ const Main = () => {
   return (
     <div className={styles.main_container}>
       {/* Navbar Section */}
-      <nav className={styles.navbar}>
-        {/* Logo on the left */}
-        <h1 className={styles.logo} onClick={() => navigate("/")}>
-          Logo
-        </h1>
-
-        {/* Navigation links on the right */}
-        <ul className={styles.nav_links}>
+{/* Navbar Section */}
+<nav className={styles.navbar}>
+    <h1 className={styles.logo} onClick={() => navigate("/")}>
+        Logo
+    </h1>
+    <ul className={styles.nav_links}>
           <li onClick={() => navigate("/chatbot")}>Chatbot</li>
           <li onClick={() => navigate("/reminder")}>Reminder</li>
-          <li onClick={() => navigate("/plan")}>Plan & Pie Chart</li>
-          <li onClick={() => navigate("/")}>About Us</li>
-          <li onClick={() => navigate("/")}>Contact Us</li>
+          <li onClick={() => navigate("/plan")}>Plan & Bay Chart</li>
+          <li onClick={() => navigate("/about")}>About Us</li>
+          <li onClick={() => navigate("/contact")}>Contact Us</li>
         </ul>
-
-        {/* Optional: User menu (remove if not needed) */}
-        <div className={styles.user_menu} onClick={toggleDropdown}>
-          <div className={styles.user_icon}>
+    <div className={styles.user_menu} onClick={toggleDropdown}>
+        <div className={styles.user_icon}>
             <i className={`fas fa-${user ? "user" : "female"} fa-1x`}></i>
-          </div>
-          {showDropdown && (
+        </div>
+        {showDropdown && (
             <div className={styles.dropdown_content}>
-              <a href="#">Manage Account</a>
-              <a onClick={handleLogout}>Logout</a>
+                <a href="#">Manage Account</a>
+                <a onClick={handleLogout}>Logout</a>
             </div>
-          )}
-        </div>
-      </nav>
+        )}
+    </div>
+</nav>
 
-      {/* Welcome Message Section */}
-      <section className={styles.welcome_section}>
-        <div className={styles.welcome_message}>
-          <h2>Welcome, {user ? user.displayName : "Guest"}!</h2>
-          <p>Hope you're feeling better today!</p>
-        </div>
-      </section>
+{/* Welcome Message Section */}
+<section className={styles.welcome_section}>
+  <div className={styles.welcome_message}>
+    <h2>Welcome, {user ? user.displayName : "Guest"}!</h2>
+    <p>Hope you're feeling better today!</p>
+  </div>
+  <img src="/public/peoples.jpg" alt="Welcome" className={styles.welcome_image} />
+</section>
 
       {/* Health Prediction Summary Section */}
       <section className={styles.summary_section}>
