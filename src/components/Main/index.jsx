@@ -5,7 +5,8 @@ import { Doughnut } from "react-chartjs-2";
 import { auth } from "../../firebaseConfig"; // Firebase configuration
 import { onAuthStateChanged } from "firebase/auth"; // Firebase auth state listener
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
-import peoplesImage from '../../assets/images/peoples.jpg'; // استيراد الصورة من داخل src/
+import peoplesImage from '../../assets/images/peoples.jpg'; // استيراد الصورة الرئيسية
+import dotsImage from '../../assets/images/dots-1.png'; // استيراد صورة النقاط
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -135,11 +136,16 @@ const Main = () => {
 
       {/* Welcome Message Section */}
       <section className={styles.welcome_section}>
+        {/* العنوان الكبير */}
+        <h1 className={styles.main_title}>AI-Powered Integrated Healthcare Assistant</h1>
+
         <div className={styles.welcome_message}>
           <h2>Welcome, {user ? user.displayName : "Guest"}!</h2>
           <p>Hope you're feeling better today!</p>
+          <button className={styles.explore_button}>Explore Now</button> {/* زر Explore Now */}
         </div>
         <img src={peoplesImage} alt="Welcome" className={styles.welcome_image} />
+        <img src={dotsImage} alt="Dots" className={styles.dots_image} /> {/* إضافة صورة النقاط */}
       </section>
 
       {/* Health Prediction Summary Section */}

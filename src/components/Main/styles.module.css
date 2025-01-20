@@ -34,6 +34,7 @@ html {
 
 /* Logo Style in Navbar */
 .logo {
+  margin-left: 200px;
   display: flex;
   align-items: center;
   font-weight: 700;
@@ -80,6 +81,7 @@ html {
 }
 
 .user_icon {
+  margin-left: -200px;
   font-size: 18px;
   color: #1F1534;
 }
@@ -87,7 +89,7 @@ html {
 .dropdown_content {
   position: absolute;
   top: 40px;
-  right: 0;
+  right: 70%;
   background-color: #ffffff;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   border-radius: 6px;
@@ -145,10 +147,52 @@ html {
 }
 
 .dropdown_content a:hover {
-  background-color: #52a7bc;
+  background-color: #3a7bd5;
   color: white;
 }
 
+/* Title Section */
+.title_section {
+  position: absolute;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f0f0f0; /* لون خلفية مؤقت */
+  overflow: hidden; /* إخفاء أي محتوى يخرج عن الحدود */
+}
+
+/* Main Title Styling */
+.main_title {
+  font-size: 3rem; /* تصغير حجم الخط */
+  font-weight: bold;
+  color: #458FF6; /* لون النص */
+  text-align: center;
+  position: absolute; /* لجعل العنوان فوق كل شيء */
+  top: 5%; /* تحديد الموضع الرأسي */
+  left: 50%; /* تحديد الموضع الأفقي */
+  transform: translateX(-50%); /* توسيط العنوان */
+  z-index: 4; /* التأكد من ظهور العنوان فوق كل شيء */
+  animation: titleEffect 5s infinite; /* تأثير متحرك */
+  white-space: nowrap; /* منع النص من الانتقال لسطر جديد */
+}
+
+/* Title Effect Animation */
+@keyframes titleEffect {
+  0% {
+    transform: translateX(-50%) scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: translateX(-50%) scale(1.1);
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateX(-50%) scale(1);
+    opacity: 1;
+  }
+}
 /* Welcome Section - Background and Position */
 .welcome_section {
   position: relative;
@@ -163,7 +207,7 @@ html {
 /* Welcome Message Styling */
 .welcome_message {
   z-index: 2;
-  color: white;
+  color: black; /* لون النص */
   text-align: left;
   font-size: 2rem;
   font-weight: bold;
@@ -174,26 +218,70 @@ html {
 /* Welcome Image Styling */
 .welcome_image {
   position: absolute;
-  right: 0;
+  right: 10%;
   top: 50%;
   transform: translateY(-50%);
-  width: 50%;
+  width: 35%; /* تقليل عرض الصورة */
   height: auto;
   z-index: 1;
 }
 
+/* Dots Image Styling */
+.dots_image {
+  position: absolute;
+  right: 85%;
+  top: 20%;
+  transform: translateY(-50%);
+  max-width: 100%;
+  height: auto;
+  z-index: 1;
+  opacity: 0.6; /* شفافية الصورة */
+}
+
 /* Welcome Message Heading */
 .welcome_message h2 {
-  color: black;
+  color: #333; /* لون نص العنوان */
   font-size: 2.5rem;
   margin-bottom: 10px;
+  margin-left: 200px;
 }
 
 /* Welcome Message Paragraph */
 .welcome_message p {
   font-size: 1.2rem;
   margin-top: 10px;
+  color: #555; /* لون نص الفقرة */
+  margin-left: 200px;
 }
+
+/* Explore Now Button Styling */
+.explore_button {
+  background-color: #458FF6; /* لون الخلفية */
+  width: 200px;
+  height: 60px;
+  box-sizing: border-box;
+  color: white; /* لون النص */
+  border: none;
+  padding: 10px 20px;
+  font-size: 18px;
+  line-height: 1;
+  font-weight: 700;
+  border-radius: 100px;
+  cursor: pointer;
+  margin-left: 42px; /* نفس المسافة مثل النص */
+  margin-top: 20px; /* مسافة من الأعلى */
+  -webkit-transition: all 0.25s ease;
+  transition: all 0.25s ease;
+  position: absolute; /* جعل الزر ثابتًا */
+  z-index: 3; /* التأكد من ظهور الزر فوق العناصر الأخرى */
+  top: 60%; /* تحديد الموضع الرأسي */
+  left: 200px; /* تحديد الموضع الأفقي */
+}
+
+.explore_button:hover {
+  border: 2px solid #458FF6;
+  color: #458FF6;
+  background: #fff;}
 
 /* Typing Effect Paragraph in Welcome Message */
 .welcome_message p:nth-child(2) {
@@ -288,7 +376,7 @@ html {
 
 /* Table Header Styling */
 .schedule_table th {
-  background-color: #52a7bc;
+  background-color: #458FF6;
   color: white;
 }
 
@@ -307,7 +395,7 @@ html {
   position: fixed;
   bottom: 20px;
   right: 20px;
-  background-color: #52a7bc;
+  background-color: #458FF6;
   color: white;
   border: none;
   border-radius: 50%;
@@ -323,7 +411,7 @@ html {
 }
 
 .scrollToTop:hover {
-  background-color: #4a97a2;
+  background-color: #3a7bd5;
 }
 
 .scrollToTop:active {
