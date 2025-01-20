@@ -5,6 +5,7 @@ import { Doughnut } from "react-chartjs-2";
 import { auth } from "../../firebaseConfig"; // Firebase configuration
 import { onAuthStateChanged } from "firebase/auth"; // Firebase auth state listener
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import peoplesImage from '../../assets/images/peoples.jpg'; // استيراد الصورة من داخل src/
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -108,39 +109,38 @@ const Main = () => {
   return (
     <div className={styles.main_container}>
       {/* Navbar Section */}
-{/* Navbar Section */}
-<nav className={styles.navbar}>
-    <h1 className={styles.logo} onClick={() => navigate("/")}>
-        Logo
-    </h1>
-    <ul className={styles.nav_links}>
+      <nav className={styles.navbar}>
+        <h1 className={styles.logo} onClick={() => navigate("/")}>
+          Logo
+        </h1>
+        <ul className={styles.nav_links}>
           <li onClick={() => navigate("/chatbot")}>Chatbot</li>
           <li onClick={() => navigate("/reminder")}>Reminder</li>
           <li onClick={() => navigate("/plan")}>Plan & Bay Chart</li>
           <li onClick={() => navigate("/about")}>About Us</li>
           <li onClick={() => navigate("/contact")}>Contact Us</li>
         </ul>
-    <div className={styles.user_menu} onClick={toggleDropdown}>
-        <div className={styles.user_icon}>
+        <div className={styles.user_menu} onClick={toggleDropdown}>
+          <div className={styles.user_icon}>
             <i className={`fas fa-${user ? "user" : "female"} fa-1x`}></i>
-        </div>
-        {showDropdown && (
+          </div>
+          {showDropdown && (
             <div className={styles.dropdown_content}>
-                <a href="#">Manage Account</a>
-                <a onClick={handleLogout}>Logout</a>
+              <a href="#">Manage Account</a>
+              <a onClick={handleLogout}>Logout</a>
             </div>
-        )}
-    </div>
-</nav>
+          )}
+        </div>
+      </nav>
 
-{/* Welcome Message Section */}
-<section className={styles.welcome_section}>
-  <div className={styles.welcome_message}>
-    <h2>Welcome, {user ? user.displayName : "Guest"}!</h2>
-    <p>Hope you're feeling better today!</p>
-  </div>
-  <img src="/public/peoples.jpg" alt="Welcome" className={styles.welcome_image} />
-</section>
+      {/* Welcome Message Section */}
+      <section className={styles.welcome_section}>
+        <div className={styles.welcome_message}>
+          <h2>Welcome, {user ? user.displayName : "Guest"}!</h2>
+          <p>Hope you're feeling better today!</p>
+        </div>
+        <img src={peoplesImage} alt="Welcome" className={styles.welcome_image} />
+      </section>
 
       {/* Health Prediction Summary Section */}
       <section className={styles.summary_section}>
