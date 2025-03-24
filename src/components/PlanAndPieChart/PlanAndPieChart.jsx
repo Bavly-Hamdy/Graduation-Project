@@ -185,7 +185,8 @@ const PlanAndPieChart = () => {
         doc.text(`Gender: ${userData.gender}`, 10, 50);
         doc.text(`Height: ${userData.height}cm`, 10, 60);
         doc.text(`Weight: ${userData.weight} kg`, 10, 70);
-        doc.text(`Health Conditions: ${userData.healthConditions}`, 10, 80);
+        doc.text(`Sugar Level: ${userData.sugarLevel}`, 10, 80);
+        doc.text(`Health Conditions: ${userData.healthConditions}`, 10, 90);
         doc.save("patient_info.pdf");
       }
     }, {

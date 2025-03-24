@@ -1,26 +1,26 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Navbar from "./Navbar"; // استيراد الـ Navbar
-import styles from "./History.module.css"; // CSS خاص بالصفحة
+import Navbar from "./Navbar"; // Import Navbar
+import styles from "./History.module.css"; // CSS for the History page
 
 const HistoryPage = () => {
   const navigate = useNavigate();
   const [chatHistory, setChatHistory] = useState([]);
 
-  // تحميل بيانات الـ History عند فتح الصفحة
+  // Load chat history from localStorage when the page loads
   useEffect(() => {
     const storedHistory = JSON.parse(localStorage.getItem("chatHistory")) || [];
     setChatHistory(storedHistory);
   }, []);
 
-  // التعامل مع اختيار شات معين
+  // Handle selecting a chat
   const handleSelectChat = (index) => {
     const selectedChat = chatHistory[index];
     localStorage.setItem("currentChat", JSON.stringify(selectedChat));
     navigate("/chatbot");
   };
 
-  // مسح كل المحادثات
+  // Clear all chat history
   const handleClearAllHistory = () => {
     setChatHistory([]);
     localStorage.removeItem("chatHistory");

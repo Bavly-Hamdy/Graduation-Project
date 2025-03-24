@@ -34,7 +34,7 @@ const AddReminderModal = ({ isOpen, onClose, onAdd, reminderToEdit }) => {
         placeholder="Medication/Test" 
         value={medication} 
         onChange={(e) => setMedication(e.target.value)} 
-      />
+      />   
       <input 
         type="date" 
         value={date} 

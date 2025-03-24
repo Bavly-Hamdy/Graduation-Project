@@ -1,22 +1,55 @@
 import React, { useState, useEffect } from "react";
 import styles from "./styles.module.css";
 import { useNavigate } from "react-router-dom";
-import { auth } from "../../firebaseConfig";
+import { auth, realTimeDb } from "../../firebaseConfig"; // Import Firebase auth and realTimeDb
 import { onAuthStateChanged } from "firebase/auth";
-import axios from "axios";
+import { ref, set, onValue, push, remove } from "firebase/database"; // Import Firebase Realtime Database functions
+import { generateContent } from "./gemini"; // Import the Gemini utility
 
 const Chatbot = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
+  const [userId, setUserId] = useState(null); // Track the user's unique ID
   const [showDropdown, setShowDropdown] = useState(false);
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState("");
   const [darkMode, setDarkMode] = useState(false);
   const [savedMessages, setSavedMessages] = useState([]);
   const [favouriteMessages, setFavouriteMessages] = useState([]);
-  const [history, setHistory] = useState([]);
 
-  const apiKey = process.env.REACT_APP_API_KEY;
+  // Fetch the authenticated user and their unique ID
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser) {
+        setUser(currentUser);
+        setUserId(currentUser.uid); // Set the user's unique ID
+      } else {
+        setUser(null);
+        setUserId(null);
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  // Fetch chat history from Firebase Realtime Database
+  useEffect(() => {
+    if (!userId) return; // Skip if no user is logged in
+
+    const chatHistoryRef = ref(realTimeDb, `Users/${userId}/chatHistory`); // Reference to the user's chat history
+    onValue(chatHistoryRef, (snapshot) => {
+      const data = snapshot.val();
+      if (data) {
+        const messagesArray = Object.keys(data).map((key) => ({
+          id: key, // Use the unique ID from Firebase
+          ...data[key],
+        }));
+        setMessages(messagesArray);
+      } else {
+        setMessages([]); // If no messages exist, set an empty array
+      }
+    });
+  }, [userId]);
 
   const toggleDropdown = () => {
     setShowDropdown((prevState) => !prevState);
@@ -35,81 +68,70 @@ const Chatbot = () => {
     if (!message.trim()) return;
 
     const userMessage = message.trim();
-    setMessages([...messages, { text: userMessage, sender: "user" }]);
+    const newMessage = { text: userMessage, sender: "user" };
+
+    // Save user message to Firebase
+    const chatHistoryRef = ref(realTimeDb, `Users/${userId}/chatHistory`);
+    const newMessageRef = push(chatHistoryRef); // Generate a unique ID for the message
+    await set(newMessageRef, newMessage);
+
     setMessage("");
 
     try {
-      const response = await axios.post(
-        "https://api.openai.com/v1/chat/completions",
-        {
-          model: "gpt-3.5-turbo",
-          messages: [
-            ...messages.map((msg) => ({
-              role: msg.sender === "user" ? "user" : "assistant",
-              content: msg.text,
-            })),
-            { role: "user", content: userMessage },
-          ],
-          max_tokens: 150,
-          temperature: 0.7,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${apiKey}`,
-          },
-        }
-      );
+      const botReply = await generateContent(userMessage); // Use Gemini API
+      const botMessage = { text: botReply, sender: "bot" };
 
-      const botReply = response.data.choices[0].message.content;
-      setMessages((prevMessages) => [
-        ...prevMessages,
-        { text: botReply, sender: "bot" },
-      ]);
+      // Save bot message to Firebase
+      const botMessageRef = push(chatHistoryRef);
+      await set(botMessageRef, botMessage);
 
-      const updatedHistory = [...history, { userMessage, botReply }];
-      setHistory(updatedHistory);
-      localStorage.setItem("chatHistory", JSON.stringify(updatedHistory));
+      // Save chat history to localStorage
+      const chatHistory = JSON.parse(localStorage.getItem("chatHistory")) || [];
+      const newChat = {
+        date: new Date().toLocaleString(),
+        messages: [newMessage, botMessage],
+      };
+      chatHistory.push(newChat);
+      localStorage.setItem("chatHistory", JSON.stringify(chatHistory));
     } catch (error) {
-      console.error("Error sending message to ChatGPT:", error.response?.status || error);
+      console.error("Error sending message to Gemini:", error);
       alert(
-        "حدث خطأ أثناء الاتصال بـ ChatGPT. تحقق من صلاحية API Key أو إعدادات الاتصال."
+        "حدث خطأ أثناء الاتصال بـ Gemini. تحقق من صلاحية API Key أو إعدادات الاتصال."
       );
     }
   };
 
-  const handleSaveMessage = (msg) => {
-    const savedMessages = JSON.parse(localStorage.getItem("savedMessages")) || [];
-    const updatedSavedMessages = [...savedMessages, msg];
-    setSavedMessages(updatedSavedMessages);
-    localStorage.setItem("savedMessages", JSON.stringify(updatedSavedMessages));
+  // Save a message to the "savedMessages" node in Firebase
+  const handleSaveMessage = async (msg) => {
+    if (!userId) return; // Skip if no user is logged in
+
+    const savedMessagesRef = ref(realTimeDb, `Users/${userId}/savedMessages`);
+    const newSavedMessageRef = push(savedMessagesRef); // Generate a unique ID for the saved message
+    await set(newSavedMessageRef, msg);
   };
 
-  const handleFavouriteMessage = (msg) => {
-    const favourites = JSON.parse(localStorage.getItem("favouriteMessages")) || [];
-    const updatedFavourites = [...favourites, msg];
-    setFavouriteMessages(updatedFavourites);
-    localStorage.setItem("favouriteMessages", JSON.stringify(updatedFavourites));
+  // Toggle favourite status of a message
+  const handleFavouriteMessage = async (msg) => {
+    if (!userId) return; // Skip if no user is logged in
+
+    const favouriteMessagesRef = ref(realTimeDb, `Users/${userId}/favouriteMessages`);
+    const newFavouriteMessageRef = push(favouriteMessagesRef); // Generate a unique ID for the favourite message
+    await set(newFavouriteMessageRef, msg);
   };
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      if (currentUser) {
-        setUser(currentUser);
-      } else {
-        setUser(null);
-      }
-    });
-    return () => unsubscribe();
-  }, []);
+  // Start a new chat by clearing the chat history
+  const startNewChat = async () => {
+    if (!userId) return; // Skip if no user is logged in
 
-  useEffect(() => {
-    const savedHistory = JSON.parse(localStorage.getItem("history")) || [];
-    setHistory(savedHistory);
-  }, []);
-
-  const startNewChat = () => {
-    setMessages([]);
+    const chatHistoryRef = ref(realTimeDb, `Users/${userId}/chatHistory`);
+    await remove(chatHistoryRef) // Clear the chat history in Firebase
+      .then(() => {
+        console.log("Chat history cleared successfully");
+        setMessages([]); // Clear the local state
+      })
+      .catch((error) => {
+        console.error("Error clearing chat history:", error);
+      });
   };
 
   // Handle Enter key press
@@ -209,7 +231,7 @@ const Chatbot = () => {
             type="text"
             value={message}
             onChange={(e) => setMessage(e.target.value)}
-            onKeyPress={handleKeyPress} // Add this line
+            onKeyPress={handleKeyPress}
             placeholder="Type a message..."
           />
           <div className={styles.iconsRight}>
