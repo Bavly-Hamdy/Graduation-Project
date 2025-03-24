@@ -1,0 +1,225 @@
+/* ========== Global Reset and Variables ========== */
+:root {
+    --primary-color: #458FF6;
+    --secondary-color: #2b5999;
+    --background-light: #ffffff;
+    --background-dark: #181818;
+    --text-light: #ffffff;
+    --text-dark: #222222;
+    --shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    --border-radius: 16px;
+    --transition: all 0.3s ease;
+  }
+  
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    user-select: none;
+  }
+  
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--background-light);
+    color: var(--text-dark);
+    transition: var(--transition);
+  }
+  
+  /* ========== Dark Mode Adjustments ========== */
+  .dark {
+    background-color: var(--background-dark);
+    color: var(--text-light);
+  }
+  
+  /* ========== Navbar Styles ========== */
+  .navbar {
+    height: 70px;
+    background-color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+  }
+  
+  .logo {
+    display: flex;
+    align-items: center;
+    font-weight: 700;
+    color: #233348;
+    font-size: 24px;
+    cursor: pointer;
+  }
+  
+  .nav_links {
+    list-style-type: none;
+    display: flex;
+    gap: 20px;
+  }
+  
+  .nav_links li {
+    color: #7D7987;
+    padding: 10px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: color 0.2s;
+    border-bottom: 2px solid transparent;
+  }
+  
+  .nav_links li:hover {
+    color: #1F1534;
+    border-bottom: 2px solid #1F1534;
+  }
+  
+  .user_menu {
+    display: flex;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+    margin-left: 20px;
+  }
+  
+  .user_icon {
+    font-size: 18px;
+    color: #1F1534;
+  }
+  
+  .dropdown_content {
+    position: absolute;
+    top: 40px;
+    right: 0;
+    background-color: #fff;
+    padding: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  }
+  
+  .dropdown_content a {
+    display: block;
+    color: #333;
+    padding: 5px;
+    text-decoration: none;
+    margin-bottom: 5px;
+    cursor: pointer;
+  }
+  
+  .dropdown_content a:hover {
+    background-color: #f1f1f1;
+  }
+  
+  /* ========== Contact Page Container ========== */
+  .contact-container {
+    margin-top: 80px; /* لأن الـ Navbar ثابت */
+    padding: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  input {
+    margin-top: 20px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+    width: 100%;
+    max-width: 600px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+  /* ========== Contact Form Styles ========== */
+  .contact-form {
+    max-width: 600px;
+    width: 600px;
+    background-color: var(--background-light);
+    padding: 40px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    text-align: center;
+  }
+  
+  .contact-form h2 {
+    font-size: 2.2rem;
+    color: var(--primary-color);
+    margin-bottom: 20px;
+  }
+  
+  .contact-form p {
+    font-size: 1.2rem;
+    color: #4b5563;
+    margin-bottom: 30px;
+  }
+  
+  .contact-form form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .contact-form input,
+  .contact-form textarea {
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1rem;
+  }
+  
+  .contact-form textarea {
+    resize: vertical;
+    min-height: 100px;
+  }
+  
+  .contact-form button {
+    padding: 12px;
+    background-color: var(--primary-color);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .contact-form button:hover {
+    background-color: var(--secondary-color);
+  }
+  
+  .contact-options {
+    margin-top: 20px;
+  }
+  
+  .contact-options p {
+    font-size: 1rem;
+    color: #4b5563;
+  }
+  
+  .contact-options a {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: var(--primary-color);
+    color: #fff;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+  }
+  
+  .contact-options a:hover {
+    background-color: var(--secondary-color);
+  }
+  
+  /* ========== Responsive Design ========== */
+  @media (max-width: 768px) {
+    .navbar {
+      padding: 10px;
+    }
+  
+    .nav_links {
+      display: none;
+    }
+  
+    .contact-container {
+      padding: 40px;
+    }
+  }  

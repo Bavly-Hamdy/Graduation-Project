@@ -1,0 +1,119 @@
+/* Navbar.module.css */
+
+.navbar {
+  height: 80px; /* Adjust height as needed */
+  background-color: #ffffff; /* White background */
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Space between logo and links */
+  padding: 0 100px; /* Add padding to the sides */
+  margin: 0;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
+/* Logo Style in Navbar */
+.logo {
+  color: #000000; /* Black text */
+  font-size: 28px; /* Adjust font size */
+  font-weight: 700; /* Bold font */
+  cursor: pointer;
+  font-family: 'Arial', sans-serif; /* Use a clean sans-serif font */
+}
+
+/* Navbar Links Section */
+.nav_links {
+  list-style-type: none;
+  display: flex;
+  gap: 40px; /* Space between links */
+  margin: 0;
+  padding: 0;
+  margin-left: auto; /* Push links to the right */
+}
+
+/* Each Navbar Item */
+.nav_links li {
+  color: #000000; /* Black text */
+  font-size: 18px; /* Adjust font size */
+  font-weight: 500; /* Medium font weight */
+  cursor: pointer;
+  transition: color 0.2s;
+  font-family: 'Arial', sans-serif; /* Use a clean sans-serif font */
+}
+
+.nav_links li:hover {
+  color: #52a7bc; /* Blue color on hover */
+}
+
+/* Optional: User Menu Section */
+.user_menu {
+  display: flex;
+  align-items: center;
+  position: relative;
+  cursor: pointer;
+  margin-left: 20px;
+  right: -50px;
+}
+
+/* User Icon Style */
+.user_icon {
+  padding-right: 50px;
+  font-size: 1.5rem;
+  color: #000000; /* Black icon */
+  cursor: pointer;
+}
+  .dropdown_content {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 40px;
+    right: 0;
+    background-color: #fff;
+    min-width: 160px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    padding: 10px;
+    z-index: 10;
+  }
+  
+  .dropdown_content a {
+    display: block;
+    padding: 8px 15px;
+    text-decoration: none;
+    color: #333;
+    font-size: 16px;
+    transition: background-color 0.3s;
+  }
+  
+  .dropdown_content a:hover {
+    background-color: #52a7bc;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    border-radius: 5px;
+  }
+  
+  .favourited {
+    color: #ff6347;
+  }
+  
+  @media (max-width: 768px) {
+    .navbar {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  
+    .nav_links {
+      flex-direction: column;
+      margin-top: 10px;
+    }
+  
+    .nav_links li {
+      margin-left: 0;
+      margin-bottom: 10px;
+    }
+  }
+  

@@ -1,0 +1,215 @@
+/* ========== Global Reset and Variables ========== */
+:root {
+  --primary-color: #458FF6;
+  --secondary-color: #2b5999;
+  --background-light: #ffffff;
+  --background-dark: #181818;
+  --text-light: #ffffff;
+  --text-dark: #222222;
+  --shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  --border-radius: 16px;
+  --transition: all 0.3s ease;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  user-select: none;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--background-light);
+  color: var(--text-dark);
+  transition: var(--transition);
+}
+
+/* ========== Dark Mode Adjustments ========== */
+.dark {
+  background-color: var(--background-dark);
+  color: var(--text-light);
+}
+
+/* ========== Navbar Styles ========== */
+.navbar {
+  height: 70px;
+  background-color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  font-weight: 700;
+  color: #233348;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.nav_links {
+  list-style-type: none;
+  display: flex;
+  gap: 20px;
+}
+
+.nav_links li {
+  color: #7D7987;
+  padding: 10px;
+  font-size: 18px;
+  cursor: pointer;
+  transition: color 0.2s;
+  border-bottom: 2px solid transparent;
+}
+
+.nav_links li:hover {
+  color: #1F1534;
+  border-bottom: 2px solid #1F1534;
+}
+
+.user_menu {
+  display: flex;
+  align-items: center;
+  position: relative;
+  cursor: pointer;
+  margin-left: 20px;
+}
+
+.user_icon {
+  font-size: 18px;
+  color: #1F1534;
+}
+
+.dropdown_content {
+  position: absolute;
+  top: 40px;
+  right: 0;
+  background-color: #fff;
+  padding: 10px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.dropdown_content a {
+  display: block;
+  color: #333;
+  padding: 5px;
+  text-decoration: none;
+  margin-bottom: 5px;
+  cursor: pointer;
+}
+
+.dropdown_content a:hover {
+  background-color: #f1f1f1;
+}
+
+/* ========== About Page Container ========== */
+.container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 80px; /* Navbar fixed */
+  padding: 80px;
+}
+
+/* ========== Text Section ========== */
+.textSection {
+  max-width: 50%;
+}
+
+.textSection h1 {
+  font-size: 2.4rem;
+  color: var(--primary-color);
+  margin-bottom: 20px;
+}
+
+.textSection p {
+  font-size: 1.2rem;
+  color: #4b5563;
+  margin-bottom: 20px;
+  line-height: 1.6;
+}
+
+/* Extra text animation */
+.extraText {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: all 0.5s ease;
+}
+
+.extraText.open {
+  max-height: 1000px; /* قيمة كبيرة لضمان ظهور المحتوى */
+  opacity: 1;
+}
+
+.textSection button {
+  padding: 12px 24px;
+  background-color: var(--primary-color);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  transition: background-color 0.3s ease;
+}
+
+.textSection button:hover {
+  background-color: var(--secondary-color);
+}
+
+/* ========== Image Section ========== */
+.imageSection {
+  position: relative;
+  max-width: 45%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.peopleImg {
+  width: 100%;
+  max-width: 650px;
+  z-index: 2;
+}
+
+.dotsImg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100px;
+  opacity: 0.8;
+  z-index: 1;
+}
+
+/* ========== Responsive Design ========== */
+@media (max-width: 768px) {
+  .navbar {
+    padding: 10px;
+  }
+
+  .nav_links {
+    display: none;
+  }
+
+  .container {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .textSection,
+  .imageSection {
+    max-width: 100%;
+  }
+
+  .imageSection {
+    margin-top: 20px;
+  }
+}
