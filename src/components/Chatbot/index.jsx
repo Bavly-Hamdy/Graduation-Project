@@ -11,25 +11,68 @@ const Chatbot = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [userId, setUserId] = useState(null);
+
+  // للتحكم في فتح/قفل الـSidebar
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+
+  // للتحكم في إظهار الـDropdown بتاع الـUser
   const [showDropdown, setShowDropdown] = useState(false);
+
+  // رسائل الشات
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState("");
+
+  // Dark Mode
   const [darkMode, setDarkMode] = useState(false);
+
+  // مرجع لآخر الرسائل للتمرير
   const messagesEndRef = useRef(null);
 
-  // تعريف مكونات Markdown المخصصة للتنسيق
+  // مكونات الـMarkdown
   const markdownComponents = {
-    h1: ({ node, ...props }) => <h1 className={styles.markdownH1} {...props} />,
-    h2: ({ node, ...props }) => <h2 className={styles.markdownH2} {...props} />,
-    h3: ({ node, ...props }) => <h3 className={styles.markdownH3} {...props} />,
-    p: ({ node, ...props }) => <p className={styles.markdownP} {...props} />,
-    ul: ({ node, ...props }) => <ul className={styles.markdownUl} {...props} />,
-    ol: ({ node, ...props }) => <ol className={styles.markdownOl} {...props} />,
-    li: ({ node, ...props }) => <li className={styles.markdownLi} {...props} />,
-    strong: ({ node, ...props }) => <strong className={styles.markdownStrong} {...props} />,
+    h1: ({ node, children, ...props }) => (
+      <h1 className={styles.markdownH1} {...props}>
+        {children}
+      </h1>
+    ),
+    h2: ({ node, children, ...props }) => (
+      <h2 className={styles.markdownH2} {...props}>
+        {children}
+      </h2>
+    ),
+    h3: ({ node, children, ...props }) => (
+      <h3 className={styles.markdownH3} {...props}>
+        {children}
+      </h3>
+    ),
+    p: ({ node, children, ...props }) => (
+      <p className={styles.markdownP} {...props}>
+        {children}
+      </p>
+    ),
+    ul: ({ node, children, ...props }) => (
+      <ul className={styles.markdownUl} {...props}>
+        {children}
+      </ul>
+    ),
+    ol: ({ node, children, ...props }) => (
+      <ol className={styles.markdownOl} {...props}>
+        {children}
+      </ol>
+    ),
+    li: ({ node, children, ...props }) => (
+      <li className={styles.markdownLi} {...props}>
+        {children}
+      </li>
+    ),
+    strong: ({ node, children, ...props }) => (
+      <strong className={styles.markdownStrong} {...props}>
+        {children}
+      </strong>
+    ),
   };
 
-  // متابعة حالة الـ Auth للمستخدم
+  // تابع حالة الـAuth
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       if (currentUser) {
@@ -43,7 +86,7 @@ const Chatbot = () => {
     return () => unsubscribe();
   }, []);
 
-  // جلب سجل الدردشة من Firebase
+  // جلب سجل الدردشة من الـFirebase
   useEffect(() => {
     if (!userId) return;
     const chatHistoryRef = ref(realTimeDb, `Users/${userId}/chatHistory`);
@@ -54,6 +97,7 @@ const Chatbot = () => {
           id: key,
           ...data[key],
         }));
+        messagesArray.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
         setMessages(messagesArray);
       } else {
         setMessages([]);
@@ -61,7 +105,7 @@ const Chatbot = () => {
     });
   }, [userId]);
 
-  // التمرير لآخر الرسائل
+  // بعد تحديث الرسائل، انزل لآخرها
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
@@ -70,73 +114,115 @@ const Chatbot = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-  const toggleDropdown = () => {
-    setShowDropdown((prevState) => !prevState);
-  };
+  // دوال بسيطة
+  const toggleDropdown = () => setShowDropdown(!showDropdown);
+  const toggleDarkMode = () => setDarkMode(!darkMode);
+  const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
     navigate("/login");
   };
 
-  const toggleDarkMode = () => {
-    setDarkMode(!darkMode);
-  };
+  const formatBotReply = (reply) => reply.trim();
+  const getCurrentTimestamp = () => new Date().toISOString();
 
-  // دالة لتنسيق رد البوت (يمكن تعديلها حسب المطلوب)
-  const formatBotReply = (reply) => {
-    // هنا ممكن نضيف تعديلات لو محتاجين نمسح رموز غير مرغوبة، بس الأساس إن الرد هيكون Markdown
-    return reply.trim();
-  };
-
+  // إرسال رسالة (عادي)
   const sendMessage = async () => {
     if (!message.trim()) return;
-
     const userMessage = message.trim();
-    const newMessage = { text: userMessage, sender: "user" };
+    const newMessage = {
+      text: userMessage,
+      sender: "user",
+      timestamp: getCurrentTimestamp(),
+    };
 
     const chatHistoryRef = ref(realTimeDb, `Users/${userId}/chatHistory`);
-    // حفظ رسالة المستخدم
     const newMessageRef = push(chatHistoryRef);
     await set(newMessageRef, newMessage);
 
     setMessage("");
 
     try {
-      // إضافة رسالة مؤقتة بتوضح إن البوت بيفكر
-      const tempBotMessage = { text: "البوت بيفكر...", sender: "bot", temporary: true };
+      // رسالة مؤقتة
+      const tempBotMessage = {
+        text: "بيفكر...",
+        sender: "bot",
+        temporary: true,
+        timestamp: getCurrentTimestamp(),
+      };
       const tempMessageRef = push(chatHistoryRef);
       await set(tempMessageRef, tempBotMessage);
 
-      // محاكاة تأخير للتفكير (مثلاً 2 ثانية)
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+      // محاكاة تأخير
+      await new Promise((resolve) => setTimeout(resolve, 1500));
 
-      // جلب الرد من Gemini API
+      // استدعاء Gemini
       const botReply = await generateContent(userMessage);
-      // إزالة الرسالة المؤقتة من Firebase
       await remove(tempMessageRef);
 
-      // تنسيق الرد قبل حفظه
       const formattedReply = formatBotReply(botReply);
-      const botMessage = { text: formattedReply, sender: "bot" };
+      const botMessage = {
+        text: formattedReply,
+        sender: "bot",
+        timestamp: getCurrentTimestamp(),
+      };
       const botMessageRef = push(chatHistoryRef);
       await set(botMessageRef, botMessage);
-
-      // حفظ سجل الدردشة محليًا لو حابب تستخدمه
-      const chatHistory = JSON.parse(localStorage.getItem("chatHistory")) || [];
-      const newChat = {
-        date: new Date().toLocaleString(),
-        messages: [newMessage, botMessage],
-      };
-      chatHistory.push(newChat);
-      localStorage.setItem("chatHistory", JSON.stringify(chatHistory));
     } catch (error) {
       console.error("Error sending message to Gemini:", error);
-      alert("حدث خطأ أثناء الاتصال بـ Gemini. تحقق من صلاحية API Key أو إعدادات الاتصال.");
+      alert("حدث خطأ أثناء الاتصال بـ Gemini.");
     }
   };
 
-  // حفظ الرسالة للمفضلة
+  // DeepThinking
+  const handleDeepThinking = async () => {
+    if (!message.trim()) return;
+    const userMessage = message.trim();
+    const newMessage = {
+      text: userMessage,
+      sender: "user",
+      timestamp: getCurrentTimestamp(),
+    };
+
+    const chatHistoryRef = ref(realTimeDb, `Users/${userId}/chatHistory`);
+    const newMessageRef = push(chatHistoryRef);
+    await set(newMessageRef, newMessage);
+
+    setMessage("");
+
+    try {
+      // مؤقت
+      const tempBotMessage = {
+        text: "بيفكر بعمق...",
+        sender: "bot",
+        temporary: true,
+        timestamp: getCurrentTimestamp(),
+      };
+      const tempMessageRef = push(chatHistoryRef);
+      await set(tempMessageRef, tempBotMessage);
+
+      // تأخير أطول
+      await new Promise((resolve) => setTimeout(resolve, 3000));
+
+      const botReply = await generateContent(userMessage, true);
+      await remove(tempMessageRef);
+
+      const formattedReply = formatBotReply(botReply);
+      const botMessage = {
+        text: formattedReply,
+        sender: "bot",
+        timestamp: getCurrentTimestamp(),
+      };
+      const botMessageRef = push(chatHistoryRef);
+      await set(botMessageRef, botMessage);
+    } catch (error) {
+      console.error("Error sending deep thinking message to Gemini:", error);
+      alert("حدث خطأ أثناء الاتصال بـ Gemini في وضع DeepThinking.");
+    }
+  };
+
+  // حفظ رسالة
   const handleSaveMessage = async (msg) => {
     if (!userId) return;
     const savedMessagesRef = ref(realTimeDb, `Users/${userId}/savedMessages`);
@@ -144,7 +230,7 @@ const Chatbot = () => {
     await set(newSavedMessageRef, msg);
   };
 
-  // تفضيل الرسالة
+  // تفضيل رسالة
   const handleFavouriteMessage = async (msg) => {
     if (!userId) return;
     const favouriteMessagesRef = ref(realTimeDb, `Users/${userId}/favouriteMessages`);
@@ -152,7 +238,7 @@ const Chatbot = () => {
     await set(newFavouriteMessageRef, msg);
   };
 
-  // بدء محادثة جديدة بمسح سجل الدردشة
+  // بدء شات جديد
   const startNewChat = async () => {
     if (!userId) return;
     const chatHistoryRef = ref(realTimeDb, `Users/${userId}/chatHistory`);
@@ -166,34 +252,44 @@ const Chatbot = () => {
       });
   };
 
-  // التعامل مع زر Enter لإرسال الرسالة
+  // إرسال بالـEnter
   const handleKeyPress = (e) => {
     if (e.key === "Enter") {
       sendMessage();
     }
   };
 
+  // هل الشات جديد؟
+  const isNewChat = messages.length === 0;
+
   return (
     <div className={darkMode ? styles.dark : styles.light}>
       {/* Navbar */}
       <nav className={styles.navbar}>
-        <h1 className={styles.logo} onClick={() => navigate("/")}>
-          Logo
-        </h1>
+        {/* Logo */}
+        <div className={styles.navLeft}>
+          <h2 className={styles.logo} onClick={() => navigate("/")}>
+            Logo
+          </h2>
+        </div>
+
+        {/* Links في النص (لو عايز تعرضهم) */}
         <ul className={styles.nav_links}>
           <li onClick={() => navigate("/chatbot")}>Chatbot</li>
           <li onClick={() => navigate("/reminder")}>Reminder</li>
-          <li onClick={() => navigate("/plan")}>Plan & Bay Chart</li>
+          <li onClick={() => navigate("/plan")}>Plan & Chart</li>
           <li onClick={() => navigate("/about")}>About Us</li>
           <li onClick={() => navigate("/contact")}>Contact Us</li>
         </ul>
+
+        {/* User Menu */}
         <div className={styles.user_menu} onClick={toggleDropdown}>
           <div className={styles.user_icon}>
             <i className={`fas fa-${user ? "user" : "female"} fa-1x`}></i>
           </div>
           {showDropdown && (
             <div className={styles.dropdown_content}>
-              <button type="button" onClick={() => {}} className={styles.dropdownItem}>
+              <button type="button" className={styles.dropdownItem}>
                 Manage Account
               </button>
               <button type="button" onClick={handleLogout} className={styles.dropdownItem}>
@@ -205,90 +301,128 @@ const Chatbot = () => {
       </nav>
 
       {/* Sidebar */}
-      <div className={styles.sidebar}>
-        <ul>
-          <li onClick={() => navigate("/SavedMessages")}>Save</li>
-          <li onClick={() => navigate("/history")}>History</li>
-          <li onClick={() => navigate("/favourite")}>Favourite</li>
-          <li onClick={() => navigate("/settings")}>Settings</li>
+      <div className={`${styles.sidebar} ${sidebarOpen ? "" : styles.sidebarCollapsed}`}>
+        <div className={styles.sidebarTop}>
+          {/* زرار Toggle */}
+          <button className={styles.sidebarBtn} onClick={toggleSidebar}>
+            {/* لو مفتوح، أيقونة سهم لليسار + نص Collapse
+                ولو مقفول، أيقونة سهم لليمين من غير نص */}
+            {sidebarOpen ? (
+              <>
+                <i className="fas fa-angle-double-left"></i>
+                <span>Collapse</span>
+              </>
+            ) : (
+              <i className="fas fa-angle-double-right"></i>
+            )}
+          </button>
+
+          {/* زرار New Chat */}
+          <button className={styles.sidebarBtn} onClick={startNewChat}>
+            <i className="fas fa-plus"></i>
+            {sidebarOpen && <span>New Chat</span>}
+          </button>
+        </div>
+
+        {/* القوائم العادية */}
+        <ul className={styles.sidebarMenu}>
+          <li onClick={() => navigate("/SavedMessages")}>
+            <i className="fas fa-save"></i>
+            {sidebarOpen && <span>Save</span>}
+          </li>
+          <li onClick={() => navigate("/history")}>
+            <i className="fas fa-history"></i>
+            {sidebarOpen && <span>History</span>}
+          </li>
+          <li onClick={() => navigate("/favourite")}>
+            <i className="fas fa-star"></i>
+            {sidebarOpen && <span>Favourite</span>}
+          </li>
+          <li onClick={() => navigate("/settings")}>
+            <i className="fas fa-cog"></i>
+            {sidebarOpen && <span>Settings</span>}
+          </li>
           <li onClick={toggleDarkMode}>
-            {darkMode ? "Light Mode" : "Dark Mode"}
+            <i className="fas fa-adjust"></i>
+            {sidebarOpen && <span>{darkMode ? "Light Mode" : "Dark Mode"}</span>}
           </li>
         </ul>
       </div>
 
-      {/* Chatbox */}
-      <div className={styles.chatContainer}>
-        <button className={styles.newChatButton} onClick={startNewChat}>
-          New Chat
-        </button>
-        <div className={styles.messages}>
-          {messages.map((msg, index) => (
-            <div
-              key={index}
-              className={
-                msg.sender === "user" ? styles.userMessage : styles.botMessage
-              }
-            >
-              {msg.sender === "bot" ? (
-                <ReactMarkdown components={markdownComponents}>
-                  {msg.text}
-                </ReactMarkdown>
-              ) : (
-                <p>{msg.text}</p>
-              )}
-              <div className={styles.messageActions}>
-                <button
-                  className={styles.saveButton}
-                  onClick={() => handleSaveMessage(msg)}
-                >
-                  <i className="fas fa-save"></i> Save
-                </button>
-                <button
-                  className={styles.favButton}
-                  onClick={() => handleFavouriteMessage(msg)}
-                >
-                  <i className="fas fa-star"></i> Favourite
-                </button>
-              </div>
-            </div>
-          ))}
-          <div ref={messagesEndRef} />
-        </div>
-        <div className={styles.messageBox}>
-          <div className={styles.iconsLeft}>
-            <img
-              src="https://icons.iconarchive.com/icons/iconoir-team/iconoir/128/attachment-icon.png"
-              alt="Upload Icon"
-              className={styles.icon}
-            />
-            <img
-              src="https://www.iconarchive.com/download/i112658/fa-team/fontawesome/FontAwesome-Microphone.512.png"
-              alt="Voice Icon"
-              className={styles.icon}
-            />
+      {/* Chat Container */}
+      <div
+        className={`${styles.chatContainer} ${
+          sidebarOpen ? styles.withSidebar : styles.fullWidth
+        }`}
+      >
+        {isNewChat ? (
+          <div className={styles.newChatCenter}>
+            <h1 className={styles.newChatTitle}>What can I help with?</h1>
           </div>
+        ) : (
+          <div className={styles.messages}>
+            {messages.map((msg, index) => (
+              <div
+                key={index}
+                className={
+                  msg.sender === "user"
+                    ? styles.userMessage
+                    : msg.temporary
+                    ? `${styles.botMessage} ${styles.deepThinking}`
+                    : styles.botMessage
+                }
+              >
+                {msg.sender === "bot" ? (
+                  <ReactMarkdown components={markdownComponents}>{msg.text}</ReactMarkdown>
+                ) : (
+                  <p>{msg.text}</p>
+                )}
+                <div className={styles.messageActions}>
+                  <button className={styles.saveButton} onClick={() => handleSaveMessage(msg)}>
+                    <i className="fas fa-save"></i>
+                  </button>
+                  <button className={styles.favButton} onClick={() => handleFavouriteMessage(msg)}>
+                    <i className="fas fa-star"></i>
+                  </button>
+                </div>
+              </div>
+            ))}
+            <div ref={messagesEndRef} />
+          </div>
+        )}
+
+        {/* Message Box */}
+        <div className={styles.messageBox}>
+          {/* Attach */}
+          <button className={styles.iconBtn}>
+            <i className="fas fa-paperclip"></i>
+          </button>
+
+          {/* Input */}
           <input
             type="text"
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             onKeyPress={handleKeyPress}
-            placeholder="Type a message..."
+            placeholder="Type your message..."
             className={styles.messageInput}
           />
-          <div className={styles.iconsRight}>
-            <img
-              src="https://icons.iconarchive.com/icons/icons8/ios7/128/Arrows-Right-2-icon.png"
-              alt="Send Icon"
-              onClick={sendMessage}
-              className={styles.sendIcon}
-            />
-          </div>
+
+          {/* Search */}
+          <button className={styles.iconBtn}>
+            <i className="fas fa-search"></i>
+          </button>
+
+          {/* DeepThinking */}
+          <button className={styles.iconBtn} onClick={handleDeepThinking}>
+            <i className="fas fa-brain"></i>
+          </button>
+
+          {/* Send */}
+          <button className={styles.sendBtn} onClick={sendMessage}>
+            <i className="fas fa-paper-plane"></i>
+          </button>
         </div>
-        {/* زرار للانتقال لآخر الرسائل */}
-        <button className={styles.scrollButton} onClick={scrollToBottom}>
-          ↓
-        </button>
       </div>
     </div>
   );

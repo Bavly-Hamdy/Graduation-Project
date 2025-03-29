@@ -1,4 +1,3 @@
-/* Global Reset and CSS Variables */
 :root {
   --primary-color: #458FF6;
   --secondary-color: #2b5999;
@@ -10,7 +9,6 @@
   --border-radius: 16px;
   --transition: all 0.3s ease;
   --deepthinking-color: #888;
-  --spinner-size: 40px;
 }
 
 /* Reset */
@@ -18,12 +16,11 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  -webkit-user-select: none; /* Safari */
   user-select: none;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background-color: var(--background-light);
   color: var(--text-dark);
   transition: var(--transition);
@@ -37,7 +34,7 @@ body {
 
 /* Navbar */
 .navbar {
-  height: 70px;
+  height: 60px;
   background-color: var(--background-light);
   display: flex;
   align-items: center;
@@ -50,13 +47,15 @@ body {
   z-index: 1000;
 }
 
-.logo {
-  margin-left: 200px;
+.navLeft {
   display: flex;
   align-items: center;
-  font-weight: 700;
+}
+
+.logo {
+  font-size: 20px;
+  font-weight: bold;
   color: #233348;
-  font-size: 24px;
   cursor: pointer;
 }
 
@@ -70,7 +69,7 @@ body {
   color: #7D7987;
   padding: 10px;
   font-weight: 400;
-  font-size: 18px;
+  font-size: 16px;
   cursor: pointer;
   transition: color 0.2s;
   border-bottom: 2px solid transparent;
@@ -87,13 +86,12 @@ body {
   align-items: center;
   position: relative;
   cursor: pointer;
-  margin-right: 20px;
 }
 
 .user_icon {
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   color: #1F1534;
-  padding-right: 50px;
+  margin-right: 10px;
 }
 
 .dropdown_content {
@@ -103,7 +101,7 @@ body {
   top: 50px;
   right: 0;
   background-color: #ffffff;
-  min-width: 160px;
+  min-width: 140px;
   box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
   z-index: 1;
   border-radius: 5px;
@@ -114,14 +112,13 @@ body {
 }
 
 .dropdownItem {
-  padding: 10px;
+  padding: 8px;
   background: none;
   border: none;
   text-align: left;
   cursor: pointer;
   color: #1F1534;
-  font-size: 16px;
-  transition: background-color 0.2s;
+  font-size: 14px;
 }
 
 .dropdownItem:hover {
@@ -134,63 +131,111 @@ body {
   width: 220px;
   background-color: var(--background-light);
   position: fixed;
-  top: 80px;
+  top: 60px; /* تحت الـNavbar */
   left: 0;
   bottom: 0;
-  padding-top: 20px;
   box-shadow: var(--shadow);
+  transition: width 0.3s;
+  overflow: hidden;
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
 }
 
-.sidebar ul {
+.sidebarCollapsed {
+  width: 60px;
+}
+
+.sidebarTop {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px;
+}
+
+.sidebarBtn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: var(--primary-color);
+  border: none;
+  color: #fff;
+  font-size: 14px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  justify-content: center;
+  margin-bottom: 5px;
+  transition: background 0.2s;
+}
+
+.sidebarBtn:hover {
+  background: #2b82e4;
+}
+
+.sidebarMenu {
   list-style: none;
-  padding: 0;
+  padding: 10px;
 }
 
-.sidebar li {
+.sidebarMenu li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   padding: 12px;
   color: var(--text-dark);
   cursor: pointer;
   transition: background-color 0.3s;
-  font-size: 18px;
+  font-size: 15px;
+  border-radius: 8px;
 }
 
-.sidebar li:hover {
+.sidebarMenu li:hover {
   background-color: var(--primary-color);
   color: var(--text-light);
 }
 
 /* Chat Container */
 .chatContainer {
-  margin-left: 240px;
-  padding: 25px;
+  position: fixed;
+  top: 60px;
+  right: 0;
+  bottom: 0;
+  left: 220px;
+  background-color: var(--background-light);
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 80px);
-  justify-content: flex-end;
-  background-color: var(--background-light);
-  box-shadow: var(--shadow);
-  border-radius: var(--border-radius);
   overflow: hidden;
-  position: relative;
+  transition: var(--transition);
 }
 
-/* Messages */
+/* لو الـSidebar صغيرة */
+.fullWidth {
+  left: 60px !important;
+}
+
+/* لو الـSidebar بالحجم العادي */
+.withSidebar {
+  left: 220px !important;
+}
+
+/* منطقة الرسائل */
 .messages {
   flex: 1;
   overflow-y: auto;
-  margin-bottom: 20px;
-  padding: 10px;
+  padding: 20px;
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
-/* Message Bubbles */
+/* الرسائل */
 .userMessage,
 .botMessage {
   max-width: 70%;
   padding: 12px;
-  border-radius: var(--border-radius);
+  border-radius: 8px;
   position: relative;
   word-wrap: break-word;
   line-height: 1.5;
@@ -209,76 +254,17 @@ body {
   align-self: flex-start;
 }
 
-/* DeepThinking Message Styling */
-.botMessage.deepThinking {
+/* DeepThinking */
+.deepThinking {
   font-style: italic;
   color: var(--deepthinking-color);
-  position: relative;
 }
 
-/* Spinner Animation for DeepThinking */
-.spinner {
-  width: var(--spinner-size);
-  height: var(--spinner-size);
-  border: 4px solid #f3f3f3;
-  border-top: 4px solid var(--primary-color);
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-  margin: auto;
-  margin-top: 10px;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-/* Message Box */
-.messageBox {
+/* أزرار حفظ وفيفوريت */
+.messageActions {
+  margin-top: 5px;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background-color: #f5f5f5;
-  padding: 10px 15px;
-  border-radius: 30px;
-  box-shadow: var(--shadow);
-  flex-wrap: wrap;
-}
-
-.messageBox input {
-  flex: 1 1 300px; /* يسمح للصندوق بالتوسع لو النص كتير */
-  border: none;
-  outline: none;
-  padding: 10px;
-  font-size: 16px;
-  border-radius: 20px;
-  background-color: #fff;
-  min-width: 250px;
-}
-
-/* Icon Containers */
-.iconsLeft,
-.iconsRight {
-  display: flex;
-  gap: 10px;
-}
-
-.icon {
-  width: 22px;
-  height: 22px;
-  cursor: pointer;
-  transition: transform 0.2s ease;
-}
-
-.icon:hover {
-  transform: scale(1.1);
-}
-
-/* Button Icons */
-.sendIcon {
-  width: 28px;
-  height: 28px;
-  cursor: pointer;
+  gap: 5px;
 }
 
 .saveButton,
@@ -287,8 +273,6 @@ body {
   border: none;
   cursor: pointer;
   color: #666;
-  padding: 5px 10px;
-  margin-right: 10px;
   font-size: 14px;
 }
 
@@ -297,50 +281,71 @@ body {
   color: var(--primary-color);
 }
 
-/* New Chat Button */
-.newChatButton {
-  position: fixed;
-  bottom: 10px;
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: #000;
+/* لو الشات فاضي */
+.newChatCenter {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.newChatTitle {
+  font-size: 1.8rem;
+  color: #555;
+}
+
+/* صندوق الكتابة */
+.messageBox {
+  display: flex;
+  align-items: center;
+  background-color: #f7f7f8;
+  padding: 15px 20px;
+  box-shadow: 0 -2px 5px rgba(0,0,0,0.05);
+}
+
+.messageInput {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 16px;
+  background: transparent;
+  color: var(--text-dark);
+  margin: 0 10px;
+}
+
+/* أزرار الأيقونات */
+.iconBtn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  color: #444;
+  transition: transform 0.2s;
+  margin: 0 5px;
+}
+
+.iconBtn:hover {
+  transform: scale(1.1);
+}
+
+.sendBtn {
+  background: var(--primary-color);
+  border: none;
   color: #fff;
   font-size: 16px;
-  padding: 12px 20px;
-  border-radius: 25px;
-  border: none;
+  padding: 10px 15px;
+  border-radius: 8px;
   cursor: pointer;
-  transition: background-color 0.3s ease-in-out;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-  z-index: 100;
+  margin-left: 5px;
+  transition: background-color 0.2s;
 }
 
-.newChatButton:hover {
-  background-color: #cc3b4a;
+.sendBtn:hover {
+  background-color: #2b82e4;
 }
 
-/* زرار التمرير لآخر الرسائل */
-.scrollButton {
-  position: fixed;
-  bottom: 80px;
-  right: 20px;
-  background-color: var(--primary-color);
-  color: #fff;
-  border: none;
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  font-size: 24px;
-  cursor: pointer;
-  box-shadow: var(--shadow);
-  transition: background-color 0.3s ease;
-}
-
-.scrollButton:hover {
-  background-color: var(--secondary-color);
-}
-
-/* Markdown Styling */
+/* Markdown Styling (عشان رسائل البوت) */
 .markdownH1 {
   font-size: 1.8em;
   font-weight: bold;
@@ -381,18 +386,25 @@ body {
   font-weight: bold;
 }
 
-/* Responsive Design */
+/* Responsive */
 @media (max-width: 768px) {
   .navbar {
-    padding: 10px;
+    height: 50px;
   }
   .nav_links {
     display: none;
   }
   .sidebar {
-    width: 180px;
+    width: 60px;
   }
-  .chatContainer {
-    margin-left: 200px;
+  .sidebarCollapsed {
+    width: 60px;
+  }
+  .fullWidth,
+  .withSidebar {
+    left: 60px !important;
+  }
+  .messageBox {
+    padding: 10px;
   }
 }
