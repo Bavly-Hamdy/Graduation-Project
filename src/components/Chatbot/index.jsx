@@ -1,55 +1,74 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import ReactMarkdown from "react-markdown";
 import styles from "./styles.module.css";
 import { useNavigate } from "react-router-dom";
-import { auth, realTimeDb } from "../../firebaseConfig"; // Import Firebase auth and realTimeDb
+import { auth, realTimeDb } from "../../firebaseConfig";
 import { onAuthStateChanged } from "firebase/auth";
-import { ref, set, onValue, push, remove } from "firebase/database"; // Import Firebase Realtime Database functions
-import { generateContent } from "./gemini"; // Import the Gemini utility
+import { ref, set, onValue, push, remove } from "firebase/database";
+import { generateContent } from "./gemini";
 
 const Chatbot = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
-  const [userId, setUserId] = useState(null); // Track the user's unique ID
+  const [userId, setUserId] = useState(null);
   const [showDropdown, setShowDropdown] = useState(false);
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState("");
   const [darkMode, setDarkMode] = useState(false);
-  const [savedMessages, setSavedMessages] = useState([]);
-  const [favouriteMessages, setFavouriteMessages] = useState([]);
+  const messagesEndRef = useRef(null);
 
-  // Fetch the authenticated user and their unique ID
+  // تعريف مكونات Markdown المخصصة للتنسيق
+  const markdownComponents = {
+    h1: ({ node, ...props }) => <h1 className={styles.markdownH1} {...props} />,
+    h2: ({ node, ...props }) => <h2 className={styles.markdownH2} {...props} />,
+    h3: ({ node, ...props }) => <h3 className={styles.markdownH3} {...props} />,
+    p: ({ node, ...props }) => <p className={styles.markdownP} {...props} />,
+    ul: ({ node, ...props }) => <ul className={styles.markdownUl} {...props} />,
+    ol: ({ node, ...props }) => <ol className={styles.markdownOl} {...props} />,
+    li: ({ node, ...props }) => <li className={styles.markdownLi} {...props} />,
+    strong: ({ node, ...props }) => <strong className={styles.markdownStrong} {...props} />,
+  };
+
+  // متابعة حالة الـ Auth للمستخدم
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       if (currentUser) {
         setUser(currentUser);
-        setUserId(currentUser.uid); // Set the user's unique ID
+        setUserId(currentUser.uid);
       } else {
         setUser(null);
         setUserId(null);
       }
     });
-
     return () => unsubscribe();
   }, []);
 
-  // Fetch chat history from Firebase Realtime Database
+  // جلب سجل الدردشة من Firebase
   useEffect(() => {
-    if (!userId) return; // Skip if no user is logged in
-
-    const chatHistoryRef = ref(realTimeDb, `Users/${userId}/chatHistory`); // Reference to the user's chat history
+    if (!userId) return;
+    const chatHistoryRef = ref(realTimeDb, `Users/${userId}/chatHistory`);
     onValue(chatHistoryRef, (snapshot) => {
       const data = snapshot.val();
       if (data) {
         const messagesArray = Object.keys(data).map((key) => ({
-          id: key, // Use the unique ID from Firebase
+          id: key,
           ...data[key],
         }));
         setMessages(messagesArray);
       } else {
-        setMessages([]); // If no messages exist, set an empty array
+        setMessages([]);
       }
     });
   }, [userId]);
+
+  // التمرير لآخر الرسائل
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
 
   const toggleDropdown = () => {
     setShowDropdown((prevState) => !prevState);
@@ -64,28 +83,46 @@ const Chatbot = () => {
     setDarkMode(!darkMode);
   };
 
+  // دالة لتنسيق رد البوت (يمكن تعديلها حسب المطلوب)
+  const formatBotReply = (reply) => {
+    // هنا ممكن نضيف تعديلات لو محتاجين نمسح رموز غير مرغوبة، بس الأساس إن الرد هيكون Markdown
+    return reply.trim();
+  };
+
   const sendMessage = async () => {
     if (!message.trim()) return;
 
     const userMessage = message.trim();
     const newMessage = { text: userMessage, sender: "user" };
 
-    // Save user message to Firebase
     const chatHistoryRef = ref(realTimeDb, `Users/${userId}/chatHistory`);
-    const newMessageRef = push(chatHistoryRef); // Generate a unique ID for the message
+    // حفظ رسالة المستخدم
+    const newMessageRef = push(chatHistoryRef);
     await set(newMessageRef, newMessage);
 
     setMessage("");
 
     try {
-      const botReply = await generateContent(userMessage); // Use Gemini API
-      const botMessage = { text: botReply, sender: "bot" };
+      // إضافة رسالة مؤقتة بتوضح إن البوت بيفكر
+      const tempBotMessage = { text: "البوت بيفكر...", sender: "bot", temporary: true };
+      const tempMessageRef = push(chatHistoryRef);
+      await set(tempMessageRef, tempBotMessage);
 
-      // Save bot message to Firebase
+      // محاكاة تأخير للتفكير (مثلاً 2 ثانية)
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+
+      // جلب الرد من Gemini API
+      const botReply = await generateContent(userMessage);
+      // إزالة الرسالة المؤقتة من Firebase
+      await remove(tempMessageRef);
+
+      // تنسيق الرد قبل حفظه
+      const formattedReply = formatBotReply(botReply);
+      const botMessage = { text: formattedReply, sender: "bot" };
       const botMessageRef = push(chatHistoryRef);
       await set(botMessageRef, botMessage);
 
-      // Save chat history to localStorage
+      // حفظ سجل الدردشة محليًا لو حابب تستخدمه
       const chatHistory = JSON.parse(localStorage.getItem("chatHistory")) || [];
       const newChat = {
         date: new Date().toLocaleString(),
@@ -95,46 +132,41 @@ const Chatbot = () => {
       localStorage.setItem("chatHistory", JSON.stringify(chatHistory));
     } catch (error) {
       console.error("Error sending message to Gemini:", error);
-      alert(
-        "حدث خطأ أثناء الاتصال بـ Gemini. تحقق من صلاحية API Key أو إعدادات الاتصال."
-      );
+      alert("حدث خطأ أثناء الاتصال بـ Gemini. تحقق من صلاحية API Key أو إعدادات الاتصال.");
     }
   };
 
-  // Save a message to the "savedMessages" node in Firebase
+  // حفظ الرسالة للمفضلة
   const handleSaveMessage = async (msg) => {
-    if (!userId) return; // Skip if no user is logged in
-
+    if (!userId) return;
     const savedMessagesRef = ref(realTimeDb, `Users/${userId}/savedMessages`);
-    const newSavedMessageRef = push(savedMessagesRef); // Generate a unique ID for the saved message
+    const newSavedMessageRef = push(savedMessagesRef);
     await set(newSavedMessageRef, msg);
   };
 
-  // Toggle favourite status of a message
+  // تفضيل الرسالة
   const handleFavouriteMessage = async (msg) => {
-    if (!userId) return; // Skip if no user is logged in
-
+    if (!userId) return;
     const favouriteMessagesRef = ref(realTimeDb, `Users/${userId}/favouriteMessages`);
-    const newFavouriteMessageRef = push(favouriteMessagesRef); // Generate a unique ID for the favourite message
+    const newFavouriteMessageRef = push(favouriteMessagesRef);
     await set(newFavouriteMessageRef, msg);
   };
 
-  // Start a new chat by clearing the chat history
+  // بدء محادثة جديدة بمسح سجل الدردشة
   const startNewChat = async () => {
-    if (!userId) return; // Skip if no user is logged in
-
+    if (!userId) return;
     const chatHistoryRef = ref(realTimeDb, `Users/${userId}/chatHistory`);
-    await remove(chatHistoryRef) // Clear the chat history in Firebase
+    await remove(chatHistoryRef)
       .then(() => {
         console.log("Chat history cleared successfully");
-        setMessages([]); // Clear the local state
+        setMessages([]);
       })
       .catch((error) => {
         console.error("Error clearing chat history:", error);
       });
   };
 
-  // Handle Enter key press
+  // التعامل مع زر Enter لإرسال الرسالة
   const handleKeyPress = (e) => {
     if (e.key === "Enter") {
       sendMessage();
@@ -161,8 +193,12 @@ const Chatbot = () => {
           </div>
           {showDropdown && (
             <div className={styles.dropdown_content}>
-              <a href="#">Manage Account</a>
-              <a onClick={handleLogout}>Logout</a>
+              <button type="button" onClick={() => {}} className={styles.dropdownItem}>
+                Manage Account
+              </button>
+              <button type="button" onClick={handleLogout} className={styles.dropdownItem}>
+                Logout
+              </button>
             </div>
           )}
         </div>
@@ -191,12 +227,16 @@ const Chatbot = () => {
             <div
               key={index}
               className={
-                msg.sender === "user"
-                  ? styles.userMessage
-                  : styles.botMessage
+                msg.sender === "user" ? styles.userMessage : styles.botMessage
               }
             >
-              <p>{msg.text}</p>
+              {msg.sender === "bot" ? (
+                <ReactMarkdown components={markdownComponents}>
+                  {msg.text}
+                </ReactMarkdown>
+              ) : (
+                <p>{msg.text}</p>
+              )}
               <div className={styles.messageActions}>
                 <button
                   className={styles.saveButton}
@@ -213,17 +253,18 @@ const Chatbot = () => {
               </div>
             </div>
           ))}
+          <div ref={messagesEndRef} />
         </div>
         <div className={styles.messageBox}>
           <div className={styles.iconsLeft}>
             <img
               src="https://icons.iconarchive.com/icons/iconoir-team/iconoir/128/attachment-icon.png"
-              alt="Upload"
+              alt="Upload Icon"
               className={styles.icon}
             />
             <img
               src="https://www.iconarchive.com/download/i112658/fa-team/fontawesome/FontAwesome-Microphone.512.png"
-              alt="Voice"
+              alt="Voice Icon"
               className={styles.icon}
             />
           </div>
@@ -233,15 +274,21 @@ const Chatbot = () => {
             onChange={(e) => setMessage(e.target.value)}
             onKeyPress={handleKeyPress}
             placeholder="Type a message..."
+            className={styles.messageInput}
           />
           <div className={styles.iconsRight}>
             <img
               src="https://icons.iconarchive.com/icons/icons8/ios7/128/Arrows-Right-2-icon.png"
+              alt="Send Icon"
               onClick={sendMessage}
               className={styles.sendIcon}
             />
           </div>
         </div>
+        {/* زرار للانتقال لآخر الرسائل */}
+        <button className={styles.scrollButton} onClick={scrollToBottom}>
+          ↓
+        </button>
       </div>
     </div>
   );
