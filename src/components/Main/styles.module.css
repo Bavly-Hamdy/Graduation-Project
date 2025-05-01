@@ -488,4 +488,59 @@ html {
   border-radius: 8px;
   cursor: pointer;
 }
+.application_section {
+  margin-top: 80px;
+  padding: 50px 20px;
+  background-color: #f9f9f9;
+  text-align: center;
+}
+
+.application_header {
+  font-size: 36px;
+  color: #333;
+  margin-bottom: 40px;
+}
+
+.application_content {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 50px;
+  flex-wrap: wrap;
+}
+
+.text_part {
+  max-width: 500px;
+  text-align: left;
+}
+
+.text_part p {
+  font-size: 18px;
+  line-height: 1.6;
+  color: #555;
+}
+
+.learn_more_button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #00a8ff;
+  color: white;
+  border: none;
+  border-radius: 25px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.learn_more_button:hover {
+  background-color: #0077cc;
+}
+
+.image_part img {
+  max-width: 450px;
+  width: 100%;
+  border-radius: 15px;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+}
 

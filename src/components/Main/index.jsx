@@ -150,46 +150,39 @@ const Main = () => {
         <img src={dotsImage} alt="Dots" className={styles.dots_image} />
       </section>
 
+      {/* ➡️ New Application Section */}
+      <section className={styles.application_section}>
+        <h2 className={styles.application_header}>About Application</h2>
+        <div className={styles.application_content}>
+          <div className={styles.text_part}>
+            <p>
+              Experience the future of healthcare with our AI-Powered Integrated Healthcare Assistant.
+              Get personalized insights, track your health progress, and receive expert guidance — all designed
+              to empower you on your journey to better well-being. Join thousands who are transforming
+              their health with the support of technology!
+            </p>
+            <button className={styles.learn_more_button}>Learn More</button>
+          </div>
+          <div className={styles.image_part}>
+            <img src={peoplesImage} alt="Healthcare Application" />
+          </div>
+        </div>
+      </section>
+
       {/* Manage Account Popup */}
       {showManagePopup && (
         <div className={styles.popup_overlay}>
           <div className={styles.popup_content}>
             <h2>Manage Account</h2>
 
-            <div className={styles.field}>
-              <label>Full Name</label>
-              <input value={userData.fullName} onChange={(e) => handleInputChange("fullName", e.target.value)} />
-            </div>
-
-            <div className={styles.field}>
-              <label>Age</label>
-              <input value={userData.age} onChange={(e) => handleInputChange("age", e.target.value)} />
-            </div>
-
-            <div className={styles.field}>
-              <label>Height (cm)</label>
-              <input value={userData.height} onChange={(e) => handleInputChange("height", e.target.value)} />
-            </div>
-
-            <div className={styles.field}>
-              <label>Weight (kg)</label>
-              <input value={userData.weight} onChange={(e) => handleInputChange("weight", e.target.value)} />
-            </div>
-
-            <div className={styles.field}>
-              <label>Birth Date</label>
-              <input value={userData.birthDate} onChange={(e) => handleInputChange("birthDate", e.target.value)} />
-            </div>
-
-            <div className={styles.field}>
-              <label>Email</label>
-              <input value={userData.email} onChange={(e) => handleInputChange("email", e.target.value)} />
-            </div>
-
-            <div className={styles.field}>
-              <label>Health Condition</label>
-              <input value={userData.healthCondition} onChange={(e) => handleInputChange("healthCondition", e.target.value)} />
-            </div>
+            {/* Form Fields */}
+            <div className={styles.field}><label>Full Name</label><input value={userData.fullName} onChange={(e) => handleInputChange("fullName", e.target.value)} /></div>
+            <div className={styles.field}><label>Age</label><input value={userData.age} onChange={(e) => handleInputChange("age", e.target.value)} /></div>
+            <div className={styles.field}><label>Height (cm)</label><input value={userData.height} onChange={(e) => handleInputChange("height", e.target.value)} /></div>
+            <div className={styles.field}><label>Weight (kg)</label><input value={userData.weight} onChange={(e) => handleInputChange("weight", e.target.value)} /></div>
+            <div className={styles.field}><label>Birth Date</label><input value={userData.birthDate} onChange={(e) => handleInputChange("birthDate", e.target.value)} /></div>
+            <div className={styles.field}><label>Email</label><input value={userData.email} onChange={(e) => handleInputChange("email", e.target.value)} /></div>
+            <div className={styles.field}><label>Health Condition</label><input value={userData.healthCondition} onChange={(e) => handleInputChange("healthCondition", e.target.value)} /></div>
 
             <div className={styles.button_row}>
               <button className={styles.save_button} onClick={handleSaveChanges}>Save Changes</button>
@@ -206,20 +199,9 @@ const Main = () => {
           <div className={styles.popup_content}>
             <h2>Change Password</h2>
 
-            <div className={styles.field}>
-              <label>Old Password</label>
-              <input type="password" value={passwordData.oldPassword} onChange={(e) => setPasswordData({ ...passwordData, oldPassword: e.target.value })} />
-            </div>
-
-            <div className={styles.field}>
-              <label>New Password</label>
-              <input type="password" value={passwordData.newPassword} onChange={(e) => setPasswordData({ ...passwordData, newPassword: e.target.value })} />
-            </div>
-
-            <div className={styles.field}>
-              <label>Confirm New Password</label>
-              <input type="password" value={passwordData.confirmNewPassword} onChange={(e) => setPasswordData({ ...passwordData, confirmNewPassword: e.target.value })} />
-            </div>
+            <div className={styles.field}><label>Old Password</label><input type="password" value={passwordData.oldPassword} onChange={(e) => setPasswordData({ ...passwordData, oldPassword: e.target.value })} /></div>
+            <div className={styles.field}><label>New Password</label><input type="password" value={passwordData.newPassword} onChange={(e) => setPasswordData({ ...passwordData, newPassword: e.target.value })} /></div>
+            <div className={styles.field}><label>Confirm New Password</label><input type="password" value={passwordData.confirmNewPassword} onChange={(e) => setPasswordData({ ...passwordData, confirmNewPassword: e.target.value })} /></div>
 
             <div className={styles.button_row}>
               <button className={styles.save_button} onClick={handlePasswordChange}>Save Password</button>
