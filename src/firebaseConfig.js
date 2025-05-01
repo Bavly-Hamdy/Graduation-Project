@@ -19,7 +19,9 @@ import {
   ref, 
   set, 
   push, 
-  onValue 
+  onValue,
+  get,    // ✅ Added get
+  update  // ✅ Added update
 } from "firebase/database";
 
 // Firebase configuration object
@@ -44,7 +46,7 @@ const facebookProvider = new FacebookAuthProvider();
 const db = getFirestore(app); // Firestore Database
 const realTimeDb = getDatabase(app); // Realtime Database
 
-// Export all initialized services and Firestore helpers
+// Export all initialized services and helpers
 export {
   auth,
   googleProvider,
@@ -62,4 +64,6 @@ export {
   set,
   push,
   onValue,
+  get,      // ✅ Export get
+  update    // ✅ Export update
 };

@@ -21,8 +21,6 @@ const AboutProject = () => {
         </h1>
         <ul className="nav_links">
           <li onClick={() => navigate("/chatbot")}>Chatbot</li>
-          <li onClick={() => navigate("/reminder")}>Reminder</li>
-          <li onClick={() => navigate("/plan")}>Plan & Bay Chart</li>
           <li onClick={() => navigate("/about")}>About Us</li>
           <li onClick={() => navigate("/contact")}>Contact Us</li>
         </ul>

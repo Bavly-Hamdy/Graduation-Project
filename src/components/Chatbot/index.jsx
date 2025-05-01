@@ -276,8 +276,6 @@ const Chatbot = () => {
         {/* Links في النص (لو عايز تعرضهم) */}
         <ul className={styles.nav_links}>
           <li onClick={() => navigate("/chatbot")}>Chatbot</li>
-          <li onClick={() => navigate("/reminder")}>Reminder</li>
-          <li onClick={() => navigate("/plan")}>Plan & Chart</li>
           <li onClick={() => navigate("/about")}>About Us</li>
           <li onClick={() => navigate("/contact")}>Contact Us</li>
         </ul>

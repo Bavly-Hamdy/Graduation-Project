@@ -8,8 +8,6 @@ import SavedMessages from "./components/Chatbot/SavedMessages";
 import FavouriteMessages from "./components/Chatbot/Favourite";
 import History from "./components/Chatbot/History";
 import Settings from "./components/Chatbot/Settings";
-import Reminder from "./components/Reminder/Reminder";
-import PlanAndPieChart from "./components/PlanAndPieChart/PlanAndPieChart";
 import AboutProject from "./components/About/AboutProject"; // ✅ Correct Import
 import ContactUs from "./components/Contact/ContactUs"; // تم إضافة صفحة Contact Us
 
@@ -73,8 +71,6 @@ function App() {
           />
         }
       />
-      <Route path="/reminder" element={<Reminder />} />
-      <Route path="/plan" element={<PlanAndPieChart />} />
       <Route path="/about" element={<AboutProject />} />
       <Route path="/contact" element={<ContactUs />} /> {/* صفحة Contact Us */}
     </Routes>
