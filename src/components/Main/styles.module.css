@@ -543,4 +543,51 @@ html {
   border-radius: 15px;
   box-shadow: 0 8px 16px rgba(0,0,0,0.1);
 }
+.features_section {
+  padding: 60px 20px;
+  background: #f9f9f9;
+  text-align: center;
+}
+
+.features_header {
+  font-size: 2.5rem;
+  margin-bottom: 40px;
+}
+
+.features_grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 30px;
+}
+
+.feature_card {
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.feature_card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+.card_image {
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-bottom: 20px;
+}
+
+.feature_card h3 {
+  font-size: 1.5rem;
+  margin: 10px 0;
+}
+
+.feature_card p {
+  font-size: 1rem;
+  color: #555;
+}
 

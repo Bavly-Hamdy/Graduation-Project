@@ -5,6 +5,9 @@ import { auth, realTimeDb, ref, get, update } from "../../firebaseConfig";
 import { onAuthStateChanged, updateEmail, reauthenticateWithCredential, EmailAuthProvider, updatePassword } from "firebase/auth";
 import peoplesImage from '../../assets/images/peoples.jpg';
 import dotsImage from '../../assets/images/dots-1.png';
+import insights from '../../assets/images/2.png';
+import tracking from '../../assets/images/Tracking.jpg';
+import assistant from '../../assets/images/1.webp'
 
 const Main = () => {
   const navigate = useNavigate();
@@ -150,7 +153,7 @@ const Main = () => {
         <img src={dotsImage} alt="Dots" className={styles.dots_image} />
       </section>
 
-      {/* ➡️ New Application Section */}
+      {/* About Application Section */}
       <section className={styles.application_section}>
         <h2 className={styles.application_header}>About Application</h2>
         <div className={styles.application_content}>
@@ -165,6 +168,26 @@ const Main = () => {
           </div>
           <div className={styles.image_part}>
             <img src={peoplesImage} alt="Healthcare Application" />
+          </div>
+        </div>
+      </section>
+      <section className={styles.features_section}>
+        <h2 className={styles.features_header}>Discover Our Features</h2>
+        <div className={styles.features_grid}>
+          <div className={styles.feature_card}>
+            <img src={insights} alt="Personalized Insights" className={styles.card_image} />
+            <h3>Personalized Insights</h3>
+            <p>Tailored health recommendations based on your personal data and goals.</p>
+          </div>
+          <div className={styles.feature_card}>
+            <img src={assistant} alt="Virtual Assistant" className={styles.card_image} />
+            <h3>24/7 Virtual Assistant</h3>
+            <p>Immediate health support whenever you need it, powered by AI.</p>
+          </div>
+          <div className={styles.feature_card}>
+            <img src={tracking} alt="Progress Tracking" className={styles.card_image} />
+            <h3>Health Progress Tracking</h3>
+            <p>Monitor your improvements and achieve milestones efficiently.</p>
           </div>
         </div>
       </section>
