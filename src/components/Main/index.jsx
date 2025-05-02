@@ -152,14 +152,6 @@ const Main = () => {
         <img src={peoplesImage} alt="Welcome" className={styles.welcome_image} />
         <img src={dotsImage} alt="Dots" className={styles.dots_image} />
       </section>
-{/* Welcome Message Section */}
-<section className={styles.welcome_section}>
-  <div className={styles.welcome_message}>
-    <h2>Welcome, {user ? user.displayName : "Guest"}!</h2>
-    <p>Hope you're feeling better today!</p>
-  </div>
-  <img src="/public/people.jgp" alt="Welcome" className={styles.welcome_image} />
-</section>
 
       {/* About Application Section */}
       <section className={styles.application_section}>
