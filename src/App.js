@@ -8,8 +8,9 @@ import SavedMessages from "./components/Chatbot/SavedMessages";
 import FavouriteMessages from "./components/Chatbot/Favourite";
 import History from "./components/Chatbot/History";
 import Settings from "./components/Chatbot/Settings";
-import AboutProject from "./components/About/AboutProject"; // ✅ Correct Import
-import ContactUs from "./components/Contact/ContactUs"; // تم إضافة صفحة Contact Us
+import AboutProject from "./components/About/AboutProject";
+import ContactUs from "./components/Contact/ContactUs";
+import ManageAccount from "./components/ManageAccount/ManageAccount"; // تمت إضافة إدارة الحساب
 
 function App() {
   const user = localStorage.getItem("token");
@@ -22,6 +23,7 @@ function App() {
 
   const handleLogout = () => {
     localStorage.removeItem("token");
+    window.location.reload(); // إعادة تحميل الصفحة بعد تسجيل الخروج
   };
 
   return (
@@ -40,10 +42,16 @@ function App() {
               />
             }
           />
+          <Route
+            path="/manage-account"
+            element={<ManageAccount darkMode={darkMode} />}
+          />
         </>
       ) : (
         <Route path="/" element={<Navigate replace to="/login" />} />
       )}
+      
+      {/* Public Routes */}
       <Route
         path="/SavedMessages"
         element={<SavedMessages darkMode={darkMode} language={language} />}
@@ -72,7 +80,10 @@ function App() {
         }
       />
       <Route path="/about" element={<AboutProject />} />
-      <Route path="/contact" element={<ContactUs />} /> {/* صفحة Contact Us */}
+      <Route path="/contact" element={<ContactUs />} />
+      
+      {/* Fallback Route */}
+      <Route path="*" element={<Navigate to={user ? "/chatbot" : "/login"} />} />
     </Routes>
   );
 }

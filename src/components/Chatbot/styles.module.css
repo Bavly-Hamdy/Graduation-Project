@@ -132,10 +132,6 @@
   border-radius: 5px;
 }
 
-.user_menu:hover .dropdown_content {
-  display: flex;
-}
-
 .dropdownItem {
   padding: 8px;
   background: none;

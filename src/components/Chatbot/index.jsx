@@ -6,27 +6,23 @@ import { auth, realTimeDb } from "../../firebaseConfig";
 import { onAuthStateChanged } from "firebase/auth";
 import { ref, set, onValue, push, remove, update } from "firebase/database";
 import { generateContent } from "./gemini";
+import ManageAccount from "../ManageAccount/ManageAccount"; // تأكد من المسار الصحيح
 
-// دالة dummy لتحليل محتوى الملف
 const generateFileSummary = async (text) => {
   return `ملخص الملف: محتوى الملف غير متوفر حالياً.`;
 };
 
-/**
- * دالة لتقسيم النص لمقاطع بناءً على اللغة.
- * كل مقطع بيكون كائن { text, lang } حيث lang يكون "ar" أو "en".
- */
 const splitByLanguage = (text) => {
   const segments = [];
   let currentSegment = "";
   let currentLang = null;
-  // Regex متكامل للأحرف العربية
   const arabicRegex = /[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF\u0621-\u064A]/;
-  
+
   for (let i = 0; i < text.length; i++) {
     const char = text[i];
     const isArabic = arabicRegex.test(char);
     const charLang = isArabic ? "ar" : "en";
+    
     if (currentLang === null) {
       currentLang = charLang;
       currentSegment += char;
@@ -38,13 +34,14 @@ const splitByLanguage = (text) => {
       currentLang = charLang;
     }
   }
+  
   if (currentSegment) {
     segments.push({ text: currentSegment, lang: currentLang });
   }
+  
   return segments;
 };
 
-// تعريف مكونات الـ Markdown
 const markdownComponents = {
   h1: ({ node, children, ...props }) => (
     <h1 className={styles.markdownH1} {...props}>{children}</h1>
@@ -72,11 +69,6 @@ const markdownComponents = {
   ),
 };
 
-/**
- * دالة لاستدعاء خدمة TTS خارجية لتحويل النص العربي لصوت.
- * يجب أن يكون عندك API endpoint (مثلاً /api/tts) بيستقبل POST مع { text, languageCode }
- * ويرجع الصوت كـ base64.
- */
 const handleExternalTTS = async (text) => {
   try {
     const response = await fetch("/api/tts", {
@@ -122,7 +114,6 @@ const Chatbot = () => {
   const fileInputRef = useRef(null);
   const messagesContainerRef = useRef(null);
 
-  // تحميل الأصوات عند المونت مع محاولة إعادة تحميل لو مفيش أصوات
   useEffect(() => {
     const loadVoices = () => {
       let attempts = 0;
@@ -142,7 +133,6 @@ const Chatbot = () => {
     speechSynthesis.onvoiceschanged = loadVoices;
   }, []);
 
-  // زر لتحديث الأصوات يدويًا
   const refreshVoices = () => {
     const availableVoices = speechSynthesis.getVoices();
     setVoices(availableVoices);
@@ -193,7 +183,10 @@ const Chatbot = () => {
     setShowScrollButton(scrollHeight - scrollTop > clientHeight + 50);
   };
 
-  const toggleDropdown = () => setShowDropdown(!showDropdown);
+  const toggleDropdown = () => {
+    setShowDropdown(!showDropdown);
+  };
+
   const toggleDarkMode = () => setDarkMode(!darkMode);
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
   const handleLogout = () => {
@@ -223,7 +216,7 @@ const Chatbot = () => {
       text: userMessage,
       sender: "user",
       timestamp: getCurrentTimestamp(),
-      attachment: attachedFile ? true : false,
+      attachment: !!attachedFile,
     };
     const newMessageRef = push(chatHistoryRef);
     await set(newMessageRef, newMessage);
@@ -391,15 +384,8 @@ const Chatbot = () => {
     fileInputRef.current.click();
   };
 
-  /**
-   * دالة TTS:
-   * - تقسم النص لمقاطع باستخدام splitByLanguage.
-   * - لو المقطع إنجليزي يستخدم الـ speechSynthesis المدمج.
-   * - لو المقطع عربي يستخدم خدمة TTS خارجية (Google Cloud TTS أو ما شابه) عبر API.
-   */
   const handleTTS = async (text) => {
     if (!text) return;
-    // لو فيه كلام شغال بالفعل، نلغيهم
     if (speechSynthesis.speaking || speechSynthesis.pending) {
       speechSynthesis.cancel();
       return;
@@ -407,13 +393,11 @@ const Chatbot = () => {
     const segments = splitByLanguage(text);
     for (const seg of segments) {
       if (seg.lang === "ar") {
-        // استخدام الخدمة الخارجية للنص العربي
         await handleExternalTTS(seg.text);
       } else {
-        // استخدام الـ speechSynthesis للنص الإنجليزي
         const utterance = new SpeechSynthesisUtterance(seg.text);
-        let voice = voices.find(v => 
-          v.lang.toLowerCase().startsWith("en") || 
+        let voice = voices.find(v =>
+          v.lang.toLowerCase().startsWith("en") ||
           v.name.toLowerCase().includes("english")
         );
         if (voice) {
@@ -421,7 +405,6 @@ const Chatbot = () => {
         }
         utterance.lang = "en-US";
         speechSynthesis.speak(utterance);
-        // يمكنك إضافة انتظار لنهاية المقطع لو حبيت
         await new Promise((resolve) => {
           utterance.onend = resolve;
         });
@@ -429,7 +412,6 @@ const Chatbot = () => {
     }
   };
 
-  // Voice Assistance باستخدام SpeechRecognition
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
   let recognition;
   if (SpeechRecognition) {
@@ -475,7 +457,6 @@ const Chatbot = () => {
     };
   }
 
-  // زر لتبديل لغة التعرف الصوتي بين "ar-EG" و "en-US"
   const toggleRecognitionLang = () => {
     setRecognitionLang((prevLang) => (prevLang === "ar-EG" ? "en-US" : "ar-EG"));
   };
@@ -484,7 +465,6 @@ const Chatbot = () => {
 
   return (
     <div className={darkMode ? styles.dark : styles.light}>
-      {/* Navbar */}
       <nav className={styles.navbar}>
         <div className={styles.navLeft}>
           <h2 className={styles.logo} onClick={() => navigate("/")}>Logo</h2>
@@ -494,20 +474,37 @@ const Chatbot = () => {
           <li onClick={() => navigate("/about")}>About Us</li>
           <li onClick={() => navigate("/contact")}>Contact Us</li>
         </ul>
-        <div className={styles.user_menu} onClick={toggleDropdown}>
-          <div className={styles.user_icon}>
+        <div className={styles.user_menu}>
+          <div className={styles.user_icon} onClick={toggleDropdown}>
             <i className={`fas fa-${user ? "user" : "female"} fa-1x`}></i>
           </div>
           {showDropdown && (
             <div className={styles.dropdown_content}>
-              <button type="button" className={styles.dropdownItem}>Manage Account</button>
-              <button type="button" onClick={handleLogout} className={styles.dropdownItem}>Logout</button>
+              <button
+                type="button"
+                className={styles.dropdownItem}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  navigate("/manage-account");
+                }}
+              >
+                Manage Account
+              </button>
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleLogout();
+                }}
+                className={styles.dropdownItem}
+              >
+                Logout
+              </button>
             </div>
           )}
         </div>
       </nav>
 
-      {/* Sidebar */}
       <div className={`${styles.sidebar} ${sidebarOpen ? "" : styles.sidebarCollapsed}`}>
         <div className={styles.sidebarTop}>
           <button className={styles.sidebarBtn} onClick={toggleSidebar}>
@@ -549,15 +546,14 @@ const Chatbot = () => {
         </ul>
       </div>
 
-      {/* Chat Container */}
       <div className={`${styles.chatContainer} ${sidebarOpen ? styles.withSidebar : styles.fullWidth}`}>
         {isNewChat ? (
           <div className={styles.newChatCenter}>
             <h1 className={styles.newChatTitle}>What can I help with?</h1>
           </div>
         ) : (
-          <div 
-            className={styles.messages} 
+          <div
+            className={styles.messages}
             onScroll={handleScroll}
             ref={messagesContainerRef}
           >
@@ -629,7 +625,7 @@ const Chatbot = () => {
             <i className="fas fa-paperclip"></i>
           </button>
           <button className={styles.iconBtn} onClick={handleVoiceInput}>
-            <i className="fas fa-microphone"></i>
+            <i className={`fas fa-microphone ${isRecognizing ? styles.recording : ""}`}></i>
           </button>
           <button className={styles.iconBtn} onClick={toggleRecognitionLang}>
             <i className="fas fa-language"></i>
