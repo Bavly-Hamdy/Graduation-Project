@@ -57,7 +57,7 @@ Design a smart healthcare assistant featuring a user-friendly interface and mode
 ## 🤝 Contributors
 
 - **Bavly Hamdy Shaker** - [Bavly-Hamdy](https://github.com/Bavly-Hamdy)
-- **Yahia Mohamed Ahmed** - [Yahia-codes](https://github.com/yahia-mosa)
+- **Yahia Mohamed Ahmed** - [yahia-mosa](https://github.com/yahia-mosa)
 - **Eyad Mahmoud El-Sayed** - [EyadHeg](https://github.com/EyadHeg)
 
 ## 💬 How to Contribute
